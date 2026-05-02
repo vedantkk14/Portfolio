@@ -1,0 +1,2786 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedant — AI Engineer</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --c0: #f4efe6;
+            --c1: #e8dfd0;
+            --c2: #1a1a2e;
+            --c3: #2a7c7c;
+            --gold: #c9a96e;
+            --rose: #d4967a;
+            --lilac: #7c6aad;
+            --glass: rgba(255, 255, 255, 0.55);
+            --fd: 'Bebas Neue', sans-serif;
+            --fs: 'Instrument Serif', serif;
+            --fm: 'DM Mono', monospace;
+            --sy: 'Syne', sans-serif;
+        }
+
+        html {
+            overflow-x: hidden;
+            scroll-behavior: auto
+        }
+
+        body {
+            background: var(--c0);
+            color: var(--c2);
+            font-family: var(--fs);
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='4' fill='none' stroke='%232a7c7c' stroke-width='1.5'/%3E%3Cline x1='12' y1='2' x2='12' y2='8' stroke='%232a7c7c' stroke-width='1' opacity='.5'/%3E%3Cline x1='12' y1='16' x2='12' y2='22' stroke='%232a7c7c' stroke-width='1' opacity='.5'/%3E%3Cline x1='2' y1='12' x2='8' y2='12' stroke='%232a7c7c' stroke-width='1' opacity='.5'/%3E%3Cline x1='16' y1='12' x2='22' y2='12' stroke='%232a7c7c' stroke-width='1' opacity='.5'/%3E%3C/svg%3E") 12 12, crosshair;
+            overflow-x: hidden;
+            transition: background-color .8s ease
+        }
+
+        a, button, .fc, .tk, .lk, .h-cta, .h-resume, .h-socials a, .pc-link, .c-btn, #BTT {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='5' fill='%23c9a96e' opacity='.9'/%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%23c9a96e' stroke-width='1' opacity='.4'/%3E%3C/svg%3E") 12 12, pointer
+        }
+
+        /* LOADER */
+        #LOAD {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: var(--c0);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s ease
+        }
+
+        #LOAD.out {
+            opacity: 0;
+            pointer-events: none
+        }
+
+        .ld-title {
+            font-family: var(--fd);
+            font-size: clamp(4rem, 12vw, 9rem);
+            letter-spacing: .04em;
+            color: var(--c2);
+            line-height: 1;
+            overflow: hidden
+        }
+
+        .ld-title span {
+            display: inline-block;
+            transform: translateY(100%);
+            animation: lup .9s cubic-bezier(.16, 1, .3, 1) forwards
+        }
+
+        .ld-line {
+            width: 180px;
+            height: 1px;
+            background: rgba(42, 124, 124, .2);
+            margin: 1.5rem auto;
+            overflow: hidden
+        }
+
+        .ld-prog {
+            height: 100%;
+            background: linear-gradient(90deg, var(--c3), var(--gold));
+            width: 0;
+            transition: width 2.4s cubic-bezier(.4, 0, .2, 1)
+        }
+
+        .ld-msg {
+            font-family: var(--fm);
+            font-size: .7rem;
+            color: var(--c3);
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fup .6s ease .5s forwards
+        }
+
+        @keyframes lup {
+            to {
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes fup {
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* NAV */
+        #NAV {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background .5s ease, border-color .5s ease, box-shadow .5s ease
+        }
+
+        #NAV.bg {
+            background: rgba(244, 239, 230, .88);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(201, 169, 110, .2)
+        }
+
+        #NAV.nav-dark {
+            background: rgba(18, 18, 42, .92);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(201, 169, 110, .15);
+            box-shadow: 0 4px 30px rgba(0,0,0,.3)
+        }
+
+        #NAV.nav-dark .nav-logo {
+            color: #f4efe6
+        }
+
+        #NAV.nav-dark .nav-ul a {
+            color: rgba(244, 239, 230, .55)
+        }
+
+        #NAV.nav-dark .nav-ul a:hover {
+            color: var(--gold)
+        }
+
+        .nav-logo {
+            font-family: var(--fd);
+            font-size: 1.5rem;
+            letter-spacing: .1em;
+            color: var(--c2);
+            text-decoration: none;
+            transition: color .3s
+        }
+
+        .nav-logo:hover {
+            color: var(--c3)
+        }
+
+        .nav-ul {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none
+        }
+
+        .nav-ul a {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: rgba(26, 26, 46, .55);
+            text-decoration: none;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            transition: color .3s;
+            position: relative;
+            padding-bottom: 4px
+        }
+
+        .nav-ul a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: linear-gradient(90deg, var(--c3), var(--gold));
+            transition: width .35s cubic-bezier(.34, 1.2, .64, 1)
+        }
+
+        .nav-ul a:hover::after {
+            width: 100%
+        }
+
+        .nav-ul a:hover {
+            color: var(--c3)
+        }
+
+        /* ═══════════ S1 HERO ═══════════ */
+        #S1 {
+            height: 100vh;
+            position: relative;
+            overflow: hidden
+        }
+
+        #BGC {
+            position: absolute;
+            inset: 0;
+            z-index: 0
+        }
+
+        /* Three.js canvas */
+        .h-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 6vw 5vh
+        }
+
+        .h-tag {
+            font-family: var(--fm);
+            font-size: .72rem;
+            color: var(--c3);
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fup .7s ease 2.9s forwards
+        }
+
+        .h-name {
+            font-family: var(--fd);
+            font-size: clamp(5rem, 13vw, 12rem);
+            line-height: .9;
+            letter-spacing: .02em;
+            color: var(--c2)
+        }
+
+        .h-name .row {
+            overflow: hidden;
+            display: block
+        }
+
+        .h-name .row span {
+            display: block;
+            transform: translateY(110%);
+            animation: lup 1s cubic-bezier(.16, 1, .3, 1) forwards
+        }
+
+        .h-name .row:nth-child(1) span {
+            animation-delay: 2.8s
+        }
+
+        .h-name .row:nth-child(2) span {
+            animation-delay: 2.96s
+        }
+
+        .h-name .row:nth-child(3) span {
+            animation-delay: 3.12s;
+            font-family: var(--fs);
+            font-style: italic;
+            color: var(--c3);
+            font-size: .75em
+        }
+
+        .h-side {
+            position: absolute;
+            right: 4vw;
+            bottom: 8vh;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2rem;
+            opacity: 0;
+            animation: fup .8s ease 3.4s forwards
+        }
+
+        .h-desc {
+            font-family: var(--fs);
+            font-size: 1.05rem;
+            color: rgba(26, 26, 46, .65);
+            max-width: 280px;
+            text-align: right;
+            line-height: 1.7
+        }
+
+        .h-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: .65rem;
+            font-family: var(--fm);
+            font-size: .72rem;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--c2);
+            text-decoration: none;
+            padding: .75rem 1.75rem;
+            border: 1.5px solid var(--c2);
+            border-radius: 100px;
+            transition: all .3s
+        }
+
+        .h-cta:hover {
+            background: var(--c2);
+            color: var(--c0);
+            transform: translateY(-2px)
+        }
+
+        .h-scroll {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .6rem;
+            font-family: var(--fm);
+            font-size: .6rem;
+            letter-spacing: .2em;
+            color: rgba(26, 26, 46, .4);
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fup .7s ease 3.6s forwards
+        }
+
+        .h-scroll::after {
+            content: '';
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--c3), transparent);
+            animation: pulse 2s ease infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                height: 40px
+            }
+
+            50% {
+                opacity: .4;
+                height: 24px
+            }
+        }
+
+        /* ═══════════ S2 ABOUT — DARK DIAGONAL ═══════════ */
+        #S2 {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(150deg, #12122a 0%, #1a2a3a 60%, #0f2030 100%);
+            min-height: 100vh
+        }
+
+        .s2-diag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: var(--c0);
+            clip-path: polygon(0 0, 100% 0, 100% 0, 0 100%)
+        }
+
+        .s2-diag-b {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: #1a1200;
+            clip-path: polygon(0 100%, 100% 0, 100% 100%)
+        }
+
+        .s2-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 12rem 6vw 10rem;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 6rem;
+            align-items: center
+        }
+
+        .s2-l {}
+
+        /* Photo frame */
+        .s2-photo-wrap {
+            position: relative;
+            width: 260px;
+            margin-bottom: 2.5rem
+        }
+        .s2-photo-accent {
+            position: absolute;
+            width: 260px;
+            height: 300px;
+            border-radius: 20px;
+            border: 2px solid rgba(201,169,110,.3);
+            top: 14px;
+            left: 14px;
+            z-index: 0
+        }
+        .s2-photo {
+            width: 260px;
+            height: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 20px 60px rgba(0,0,0,.35), 0 0 0 1px rgba(201,169,110,.25);
+            transition: transform .5s
+        }
+        .s2-photo:hover {
+            transform: translateY(-6px) scale(1.02)
+        }
+        .s2-photo::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--c3), var(--rose));
+            z-index: 2
+        }
+        .s2-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .5s
+        }
+        .s2-photo:hover img {
+            transform: scale(1.06)
+        }
+        .s2-photo-label {
+            position: absolute;
+            bottom: 14px; left: 14px;
+            font-family: var(--fm);
+            font-size: .55rem;
+            color: #fff;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            background: rgba(0,0,0,.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: .35rem .8rem;
+            border-radius: 8px;
+            z-index: 3;
+            border: 1px solid rgba(255,255,255,.1)
+        }
+        .s2-photo-dot {
+            position: absolute;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            z-index: 0
+        }
+        .s2-photo-dot.d1 {
+            background: var(--gold); opacity: .5;
+            top: -8px; right: -8px
+        }
+        .s2-photo-dot.d2 {
+            background: var(--c3); opacity: .4;
+            bottom: 30px; left: -10px;
+            width: 8px; height: 8px
+        }
+
+        .s2-tag {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: var(--gold);
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            margin-bottom: 1rem
+        }
+
+        .s2-h {
+            font-family: var(--fd);
+            font-size: clamp(3.5rem, 7vw, 6.5rem);
+            line-height: .92;
+            letter-spacing: .04em;
+            color: #f4efe6
+        }
+
+        .s2-h em {
+            font-family: var(--fs);
+            font-style: italic;
+            color: var(--gold);
+            display: block;
+            font-size: .75em
+        }
+
+        .s2-p {
+            font-size: 1.05rem;
+            color: rgba(244, 239, 230, .55);
+            line-height: 1.9;
+            max-width: 400px;
+            margin-top: 2rem
+        }
+
+        .s2-p strong {
+            color: #f4efe6;
+            font-style: italic;
+            font-weight: 400
+        }
+
+        .s2-r {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem
+        }
+
+        .fc {
+            background: rgba(255, 255, 255, .04);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(201, 169, 110, .2);
+            border-radius: 14px;
+            padding: 1.75rem;
+            transition: transform .5s cubic-bezier(.34, 1.4, .64, 1),
+                box-shadow .4s, border-color .4s;
+            position: relative;
+            overflow: hidden
+        }
+
+        .fc::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            transition: left .5s
+        }
+
+        .fc:hover {
+            transform: translateX(-10px) rotateY(4deg);
+            box-shadow: 20px 10px 50px rgba(0, 0, 0, .5), -2px 0 20px rgba(201, 169, 110, .15);
+            border-color: rgba(201, 169, 110, .4)
+        }
+
+        .fc:hover::before {
+            left: 100%
+        }
+
+        .fc-icon {
+            font-size: 1.4rem;
+            margin-bottom: .6rem
+        }
+
+        .fc-t {
+            font-family: var(--sy);
+            font-size: 1.05rem;
+            color: #f4efe6;
+            margin-bottom: .4rem
+        }
+
+        .fc-b {
+            font-family: var(--fm);
+            font-size: .72rem;
+            color: rgba(244, 239, 230, .45);
+            line-height: 1.6
+        }
+
+        .fc-nums {
+            display: flex;
+            gap: 2.5rem
+        }
+
+        .fc-n {
+            text-align: center
+        }
+
+        .fc-num {
+            font-family: var(--fd);
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--gold), var(--c3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1
+        }
+
+        .fc-nl {
+            font-family: var(--fm);
+            font-size: .65rem;
+            color: rgba(244, 239, 230, .4);
+            margin-top: .2rem;
+            letter-spacing: .1em;
+            text-transform: uppercase
+        }
+
+        /* ═══════════ S3 PROJECTS — 3D CAROUSEL ═══════════ */
+        #S3 {
+            min-height: 100vh;
+            background: #1a1200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 0;
+            overflow: hidden;
+            position: relative
+        }
+
+        .s3-bg {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at 20% 50%, rgba(201, 169, 110, .08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(42, 124, 124, .08) 0%, transparent 50%)
+        }
+
+        .s3-hd {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 1
+        }
+
+        .s3-tag {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: var(--gold);
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            margin-bottom: .75rem
+        }
+
+        .s3-title {
+            font-family: var(--fd);
+            font-size: clamp(3.5rem, 9vw, 8rem);
+            letter-spacing: .04em;
+            color: #f4efe6;
+            line-height: .9
+        }
+
+        .s3-title em {
+            font-family: var(--fs);
+            font-style: italic;
+            color: var(--c3);
+            display: block;
+            font-size: .6em
+        }
+
+        /* 3D perspective carousel */
+        .c-scene {
+            width: 100vw;
+            perspective: 1400px;
+            position: relative;
+            z-index: 1
+        }
+
+        .c-track {
+            display: flex;
+            gap: 1.5rem;
+            transform-style: preserve-3d;
+            transition: transform .7s cubic-bezier(.34, 1.2, .64, 1);
+            padding: 3rem 5vw;
+            will-change: transform
+        }
+
+        .pc {
+            flex-shrink: 0;
+            width: 300px;
+            min-height: 400px;
+            border-radius: 20px;
+            padding: 2.25rem 1.75rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform .6s cubic-bezier(.34, 1.4, .64, 1),
+                box-shadow .5s, opacity .5s;
+            transform-style: preserve-3d
+        }
+
+        .pc.prev2 {
+            transform: translateX(0) rotateY(35deg) scale(.7);
+            opacity: .35
+        }
+
+        .pc.prev1 {
+            transform: translateX(0) rotateY(22deg) scale(.82);
+            opacity: .6
+        }
+
+        .pc.curr {
+            transform: translateY(-16px) scale(1.06) rotateY(0deg);
+            opacity: 1;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, .6), 0 0 0 1.5px var(--c3)
+        }
+
+        .pc.next1 {
+            transform: translateX(0) rotateY(-22deg) scale(.82);
+            opacity: .6
+        }
+
+        .pc.next2 {
+            transform: translateX(0) rotateY(-35deg) scale(.7);
+            opacity: .35
+        }
+
+        /* card themes */
+        .pc:nth-child(1) {
+            background: linear-gradient(145deg, #1e3a3a, #0f2020)
+        }
+
+        .pc:nth-child(2) {
+            background: linear-gradient(145deg, #3a2a1a, #201508)
+        }
+
+        .pc:nth-child(3) {
+            background: linear-gradient(145deg, #1a1a3a, #0d0d20)
+        }
+
+        .pc:nth-child(4) {
+            background: linear-gradient(145deg, #2a1a2a, #180d18)
+        }
+
+        .pc::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--c3), var(--gold), transparent)
+        }
+
+        .pc-no {
+            font-family: var(--fd);
+            font-size: 5rem;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            line-height: 1;
+            opacity: .08;
+            color: #fff
+        }
+
+        .pc-ic {
+            font-size: 2rem;
+            margin-bottom: 1rem
+        }
+
+        .pc-t {
+            font-family: var(--sy);
+            font-size: 1.1rem;
+            color: #f4efe6;
+            margin-bottom: .7rem;
+            line-height: 1.25
+        }
+
+        .pc-d {
+            font-family: var(--fm);
+            font-size: .72rem;
+            color: rgba(244, 239, 230, .5);
+            line-height: 1.75;
+            margin-bottom: 1.25rem
+        }
+
+        .pc-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .35rem;
+            margin-bottom: 1.5rem
+        }
+
+        .ptag {
+            font-family: var(--fm);
+            font-size: .6rem;
+            background: rgba(42, 124, 124, .15);
+            border: 1px solid rgba(42, 124, 124, .3);
+            color: rgba(42, 212, 212, .8);
+            padding: .2rem .6rem;
+            border-radius: 100px
+        }
+
+        .pc-link {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            transition: gap .2s
+        }
+
+        .pc-link:hover {
+            gap: .7rem
+        }
+
+        .c-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            position: relative;
+            z-index: 1
+        }
+
+        .c-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .05);
+            border: 1.5px solid rgba(201, 169, 110, .35);
+            color: var(--gold);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s
+        }
+
+        .c-btn:hover {
+            background: var(--gold);
+            color: #1a1200;
+            box-shadow: 0 0 20px rgba(201, 169, 110, .4)
+        }
+
+        .c-dots {
+            display: flex;
+            gap: .5rem;
+            align-items: center
+        }
+
+        .cdot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(201, 169, 110, .25);
+            transition: all .35s;
+            }
+
+        .cdot.on {
+            background: var(--gold);
+            width: 22px;
+            border-radius: 3px
+        }
+
+        /* ═══════════ S4 STACK — FULL 3D ORBIT ═══════════ */
+        #S4 {
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 50% 40%, #f4efe6 0%, #e0d5c5 60%, #c8bfb0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .s4-wrap {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 8rem 6vw
+        }
+        .s4-hd { margin-bottom: 4rem }
+        .s4-l .s4-tag {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: var(--c3);
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            margin-bottom: 1rem
+        }
+        .s4-h {
+            font-family: var(--fd);
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            line-height: .92;
+            letter-spacing: .04em;
+            color: var(--c2)
+        }
+        .s4-h em {
+            font-family: var(--fs);
+            font-style: italic;
+            color: var(--c3);
+            display: inline;
+            font-size: .75em
+        }
+
+        /* Ticker wall */
+        .ticker-wall { display: flex; flex-direction: column; gap: 1rem }
+        .ticker-row { display: flex; overflow: hidden; position: relative }
+        .ticker-row::before, .ticker-row::after {
+            content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none
+        }
+        .ticker-row::before { left: 0; background: linear-gradient(90deg, #e8dfd0 0%, transparent 100%) }
+        .ticker-row::after { right: 0; background: linear-gradient(270deg, #e8dfd0 0%, transparent 100%) }
+        .ticker-track {
+            display: flex; gap: .8rem; animation: tickerScroll 30s linear infinite; will-change: transform
+        }
+        .ticker-row.rev .ticker-track { animation-name: tickerScrollRev; animation-duration: 35s }
+        .ticker-row:nth-child(3) .ticker-track { animation-duration: 25s }
+        .ticker-wall:hover .ticker-track { animation-play-state: paused }
+
+        @keyframes tickerScroll { 0% { transform: translateX(0) } 100% { transform: translateX(-50%) } }
+        @keyframes tickerScrollRev { 0% { transform: translateX(-50%) } 100% { transform: translateX(0) } }
+
+        .tk {
+            display: flex; align-items: center; gap: .65rem; flex-shrink: 0;
+            padding: .7rem 1.2rem; border-radius: 14px;
+            background: rgba(255,255,255,.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(42,124,124,.1);
+            transition: all .35s
+        }
+        .tk:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(42,124,124,.12);
+            border-color: rgba(42,124,124,.3)
+        }
+        .tk-icon { font-size: 1.5rem; line-height: 1 }
+        .tk-name {
+            font-family: var(--sy); font-size: .78rem; color: var(--c2); white-space: nowrap
+        }
+        .tk-cat {
+            font-family: var(--fm); font-size: .5rem; color: rgba(26,26,46,.35);
+            letter-spacing: .1em; text-transform: uppercase; white-space: nowrap
+        }
+
+        /* ═══════════ S5 CONTACT — SPLIT ═══════════ */
+        #S5 {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 55% 45%;
+            position: relative;
+            overflow: hidden
+        }
+
+        .s5l {
+            background: var(--c2);
+            padding: 8rem 6vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .s5l::after {
+            content: '';
+            position: absolute;
+            bottom: -200px;
+            left: -200px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(42, 124, 124, .2), transparent 65%)
+        }
+
+        .s5-label {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: var(--gold);
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            margin-bottom: 1rem
+        }
+
+        .s5-h {
+            font-family: var(--fd);
+            font-size: clamp(4rem, 8vw, 7rem);
+            line-height: .88;
+            letter-spacing: .04em;
+            color: #f4efe6
+        }
+
+        .s5-h em {
+            font-family: var(--fs);
+            font-style: italic;
+            color: var(--gold)
+        }
+
+        .s5-p {
+            font-family: var(--fs);
+            font-size: 1.1rem;
+            color: rgba(244, 239, 230, .5);
+            line-height: 1.8;
+            max-width: 360px;
+            margin-top: 2rem
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            margin-top: 3rem
+        }
+
+        .lk {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: .85rem 0;
+            border-bottom: 1px solid rgba(244, 239, 230, .07);
+            text-decoration: none;
+            transition: all .3s;
+            group: true
+        }
+
+        .lk-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .9rem;
+            transition: all .3s;
+            flex-shrink: 0
+        }
+
+        .lk:hover .lk-icon {
+            background: var(--gold);
+            border-color: var(--gold)
+        }
+
+        .lk-txt {
+            flex: 1
+        }
+
+        .lk-type {
+            font-family: var(--fm);
+            font-size: .62rem;
+            color: rgba(244, 239, 230, .3);
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: .2rem
+        }
+
+        .lk-val {
+            font-family: var(--fm);
+            font-size: .8rem;
+            color: rgba(244, 239, 230, .7);
+            transition: color .3s
+        }
+
+        .lk:hover .lk-val {
+            color: var(--gold)
+        }
+
+        .lk-arr {
+            font-size: 1rem;
+            color: rgba(244, 239, 230, .2);
+            transition: transform .3s, color .3s
+        }
+
+        .lk:hover .lk-arr {
+            transform: translateX(6px);
+            color: var(--gold)
+        }
+
+        .s5r {
+            background: var(--c0);
+            padding: 8rem 5vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative
+        }
+
+        .s5r::before {
+            content: 'HELLO.';
+            font-family: var(--fd);
+            font-size: 12rem;
+            color: rgba(26, 26, 46, .04);
+            position: absolute;
+            bottom: -2rem;
+            right: -1rem;
+            letter-spacing: .05em;
+            line-height: 1;
+            pointer-events: none;
+            user-select: none
+        }
+
+        .term {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(26, 26, 46, .1), 0 0 0 1px rgba(201, 169, 110, .15)
+        }
+
+        .t-bar {
+            background: var(--c2);
+            padding: .85rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: .45rem
+        }
+
+        .td {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%
+        }
+
+        .td:nth-child(1) {
+            background: #ff5f57
+        }
+
+        .td:nth-child(2) {
+            background: #ffbd2e
+        }
+
+        .td:nth-child(3) {
+            background: #28c840
+        }
+
+        .t-ttl {
+            font-family: var(--fm);
+            font-size: .65rem;
+            color: rgba(244, 239, 230, .35);
+            margin: 0 auto;
+            letter-spacing: .12em
+        }
+
+        .t-body {
+            padding: 1.5rem 1.75rem;
+            min-height: 260px;
+            font-family: var(--fm);
+            font-size: .8rem;
+            line-height: 2.1
+        }
+
+        .tp {
+            color: var(--c3)
+        }
+
+        .to {
+            color: rgba(26, 26, 46, .5)
+        }
+
+        .ts {
+            color: #2a7c2a
+        }
+
+        .te {
+            color: #c0392b
+        }
+
+        .t-in-row {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            border-top: 1px solid rgba(201, 169, 110, .12);
+            padding: 1rem 1.75rem
+        }
+
+        .t-pr {
+            color: var(--c3);
+            font-family: var(--fm);
+            font-size: .8rem
+        }
+
+        .t-in {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-family: var(--fm);
+            font-size: .8rem;
+            color: var(--c2);
+            caret-color: var(--c3);
+            background: transparent
+        }
+
+        #TRES {
+            display: block
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--c2);
+            padding: 2rem 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .f-l {
+            font-family: var(--fd);
+            font-size: 1rem;
+            letter-spacing: .1em;
+            color: rgba(244, 239, 230, .4)
+        }
+
+        .f-r {
+            font-family: var(--fm);
+            font-size: .65rem;
+            color: rgba(244, 239, 230, .25);
+            letter-spacing: .1em
+        }
+
+        /* REVEAL */
+        .rx {
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity .8s ease, transform .8s ease
+        }
+
+        .rx.on {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        /* ═══════════ SCROLL-DRIVEN 3D SYSTEM ═══════════ */
+        .scroll-ctrl {
+            will-change: transform, opacity;
+            transform-style: preserve-3d;
+            transition: none !important;
+        }
+
+        .rx.d1 {
+            transition-delay: .12s
+        }
+
+        .rx.d2 {
+            transition-delay: .24s
+        }
+
+        .rx.d3 {
+            transition-delay: .36s
+        }
+
+        .rx.d4 {
+            transition-delay: .48s
+        }
+
+        /* Section number watermarks */
+        .swm {
+            position: absolute;
+            font-family: var(--fd);
+            font-size: 22vw;
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+            opacity: .03;
+            color: #fff;
+            top: 50%;
+            transform: translateY(-50%);
+            right: -2vw;
+            letter-spacing: .05em
+        }
+
+        @media(max-width:900px) {
+            .s2-inner {
+                grid-template-columns: 1fr;
+                gap: 3rem
+            }
+
+            .s4-wrap {
+                grid-template-columns: 1fr
+            }
+
+            .orbit {
+                width: min(360px, 90vw);
+                height: min(360px, 90vw)
+            }
+
+            #S5 {
+                grid-template-columns: 1fr
+            }
+
+            .s5r::before {
+                display: none
+            }
+
+            .nav-ul {
+                display: none
+            }
+
+
+        }
+
+        /* ═══════════ MARQUEE ═══════════ */
+        .marq-wrap {
+            background: #1a1200;
+            overflow: hidden;
+            padding: .85rem 0;
+            border-top: 1px solid rgba(201, 169, 110, .1);
+            border-bottom: 1px solid rgba(201, 169, 110, .1)
+        }
+
+        .marq-track {
+            display: flex;
+            width: max-content;
+            animation: marqScroll 28s linear infinite
+        }
+
+        .marq-track:hover {
+            animation-play-state: paused
+        }
+
+        .marq-item {
+            font-family: var(--fd);
+            font-size: 1rem;
+            letter-spacing: .2em;
+            color: rgba(201, 169, 110, .35);
+            text-transform: uppercase;
+            padding: 0 2rem;
+            white-space: nowrap;
+            transition: color .3s
+        }
+
+        .marq-item.hi {
+            color: rgba(42, 124, 124, .7)
+        }
+
+        .marq-sep {
+            color: rgba(201, 169, 110, .25);
+            padding: 0 .25rem;
+            font-size: .7rem
+        }
+
+        @keyframes marqScroll {
+            0% {
+                transform: translateX(0)
+            }
+
+            100% {
+                transform: translateX(-50%)
+            }
+        }
+
+
+
+        /* ─── HERO BLOBS ─── */
+        .h-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: blobFloat ease-in-out infinite
+        }
+
+        @keyframes blobFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1)
+            }
+
+            33% {
+                transform: translate(30px, -20px) scale(1.05)
+            }
+
+            66% {
+                transform: translate(-20px, 15px) scale(.95)
+            }
+        }
+
+        /* ═══════════ SCROLL PROGRESS BAR ═══════════ */
+        #SPBAR {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            z-index: 10001;
+            background: linear-gradient(90deg, var(--c3), var(--gold), var(--rose), var(--lilac));
+            width: 0%;
+            transition: width .08s linear;
+            box-shadow: 0 0 10px rgba(42, 124, 124, .5)
+        }
+
+        /* ═══════════ SECTION LABEL ═══════════ */
+        #SLABEL {
+            position: fixed;
+            bottom: 2.5rem;
+            right: 3rem;
+            z-index: 997;
+            font-family: var(--fm);
+            font-size: .6rem;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0;
+            transform: translateX(12px);
+            transition: opacity .5s ease, transform .5s ease, color .5s ease;
+            pointer-events: none
+        }
+
+        #SLABEL.show {
+            opacity: .7;
+            transform: translateX(0)
+        }
+
+        /* ═══════════ GLASSMORPHISM NAV ENHANCEMENT ═══════════ */
+        #NAV.bg {
+            background: rgba(244, 239, 230, .65);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(201, 169, 110, .15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, .04)
+        }
+
+        #NAV.nav-dark {
+            background: rgba(18, 18, 42, .7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(201, 169, 110, .1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, .2)
+        }
+
+        /* ═══════════ GLASSMORPHISM CARDS ═══════════ */
+        .fc {
+            background: rgba(255, 255, 255, .06);
+            backdrop-filter: blur(16px) saturate(150%);
+            -webkit-backdrop-filter: blur(16px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, .1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .15)
+        }
+
+        /* ═══════════ HORIZONTAL TEXT SLIDE ═══════════ */
+        .h-slide {
+            will-change: transform;
+            transition: none !important
+        }
+
+        /* ═══════════ NOISE TEXTURE OVERLAY ═══════════ */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9995;
+            pointer-events: none;
+            opacity: .025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            mix-blend-mode: overlay
+        }
+
+        /* ═══════════ BACK TO TOP BUTTON ═══════════ */
+        #BTT {
+            position: fixed;
+            bottom: 2.5rem;
+            left: 3rem;
+            z-index: 997;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(42, 124, 124, .12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(42, 124, 124, .2);
+            color: var(--c3);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity .4s ease, transform .4s ease, background .3s, box-shadow .3s;
+            pointer-events: none;
+            text-decoration: none
+        }
+
+        #BTT.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto
+        }
+
+        #BTT:hover {
+            background: var(--c3);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(42, 124, 124, .35)
+        }
+
+        /* ═══════════ HERO TEXT GRADIENT ═══════════ */
+        .h-name .row:nth-child(3) span em {
+            background: linear-gradient(135deg, var(--c3) 0%, var(--gold) 50%, var(--rose) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        /* ═══════════ FOOTER ENHANCED ═══════════ */
+        footer {
+            position: relative;
+            overflow: hidden
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--c3), transparent)
+        }
+
+        /* ═══════════ STAT NUMBERS GRADIENT ═══════════ */
+        .fc-num {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--c3) 60%, var(--lilac) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradShift 4s ease infinite
+        }
+
+        @keyframes gradShift {
+            0%, 100% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+        }
+
+        /* ═══════════ ENHANCED CARD HOVER GLOW ═══════════ */
+        .fc:hover {
+            border-color: rgba(201, 169, 110, .35);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, .25),
+                        0 0 0 1px rgba(201, 169, 110, .15),
+                        inset 0 0 30px rgba(201, 169, 110, .04)
+        }
+
+        /* ═══════════ LINK HOVER GLOW ═══════════ */
+        .lk:hover {
+            background: rgba(255, 255, 255, .02);
+            border-radius: 8px;
+            padding-left: .5rem;
+            margin-left: -.5rem
+        }
+
+        /* ═══════════ S_PHILO — PINNED TEXT SCALE ═══════════ */
+        #S_PHILO {
+            min-height: 300vh;
+            position: relative;
+            background: linear-gradient(180deg, #0d1520 0%, #0a0f1a 50%, #1a1200 100%);
+            overflow: hidden
+        }
+        .philo-pin {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2
+        }
+        .philo-tag {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: var(--gold);
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem
+        }
+        .philo-word {
+            font-family: var(--fd);
+            font-size: clamp(3rem, 10vw, 10rem);
+            line-height: 1;
+            color: #f4efe6;
+            letter-spacing: .04em;
+            text-align: center;
+            will-change: transform, opacity;
+            display: block
+        }
+        .philo-word em {
+            font-family: var(--fs);
+            font-style: italic;
+            background: linear-gradient(135deg, var(--c3), var(--gold), var(--rose));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+        .philo-sub {
+            font-family: var(--fm);
+            font-size: .82rem;
+            color: rgba(244, 239, 230, .35);
+            max-width: 500px;
+            text-align: center;
+            line-height: 1.9;
+            margin-top: 2rem
+        }
+        .philo-line {
+            width: 60px;
+            height: 1.5px;
+            background: linear-gradient(90deg, var(--c3), var(--gold));
+            margin: 2rem auto 0;
+            transform-origin: left center
+        }
+        .philo-bg-text {
+            position: absolute;
+            font-family: var(--fd);
+            font-size: 28vw;
+            color: rgba(255, 255, 255, .02);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            letter-spacing: .1em;
+            white-space: nowrap;
+            user-select: none
+        }
+
+        /* ═══════════ S_STORY — TEXT HIGHLIGHT REVEAL ═══════════ */
+        #S_STORY {
+            min-height: 100vh;
+            background: linear-gradient(165deg, #faf8f5 0%, #f0ebe0 50%, #e8dfd0 100%);
+            padding: 10rem 0;
+            position: relative;
+            overflow: hidden
+        }
+        .story-bg-num {
+            position: absolute;
+            font-family: var(--fd);
+            font-size: 40vw;
+            color: rgba(42, 124, 124, .03);
+            top: 50%;
+            right: -5vw;
+            transform: translateY(-50%);
+            pointer-events: none;
+            line-height: 1;
+            user-select: none
+        }
+        .story-inner {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 0 6vw;
+            position: relative;
+            z-index: 2
+        }
+        .story-tag {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: var(--c3);
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem
+        }
+        .story-title {
+            font-family: var(--fd);
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            color: var(--c2);
+            letter-spacing: .04em;
+            line-height: .88;
+            margin-bottom: 4rem
+        }
+        .story-title em {
+            font-family: var(--fs);
+            font-style: italic;
+            color: var(--c3)
+        }
+        .story-line {
+            font-family: var(--fs);
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: rgba(26, 26, 46, .12);
+            line-height: 2;
+            margin-bottom: 1rem;
+            position: relative;
+            transition: color .01s;
+            }
+        .story-line .hl {
+            background: linear-gradient(90deg, rgba(42,124,124,.15), rgba(201,169,110,.12));
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin: 0 -6px
+        }
+        .story-divider {
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--c3), var(--gold));
+            margin: 3rem 0;
+            transform-origin: left center
+        }
+        .story-aside {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap
+        }
+        .story-fact {
+            flex: 1;
+            min-width: 180px;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, .7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(42, 124, 124, .12);
+            border-radius: 14px;
+            text-align: center;
+            transition: transform .4s, box-shadow .4s
+        }
+        .story-fact:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(42, 124, 124, .12)
+        }
+        .sf-emoji {
+            font-size: 2rem;
+            margin-bottom: .5rem
+        }
+        .sf-label {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: rgba(26, 26, 46, .45);
+            letter-spacing: .1em;
+            text-transform: uppercase
+        }
+        .sf-val {
+            font-family: var(--sy);
+            font-size: 1rem;
+            color: var(--c2);
+            margin-top: .25rem
+        }
+
+        /* ═══════════ HERO SOCIALS ═══════════ */
+        .h-socials{display:flex;align-items:center;gap:1rem;margin-top:1.2rem}
+        .h-socials a{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(26,26,46,.2);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .3s;color:var(--c2);font-size:.85rem}
+        .h-socials a:hover{background:var(--c3);border-color:var(--c3);color:#fff;transform:translateY(-3px);box-shadow:0 6px 20px rgba(42,124,124,.25)}
+        .h-socials a svg{width:16px;height:16px;fill:currentColor}
+        .h-email{font-family:var(--fm);font-size:.68rem;color:rgba(26,26,46,.5);letter-spacing:.08em;text-decoration:none;transition:color .3s}
+        .h-email:hover{color:var(--c3)}
+        .h-resume{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--c3),var(--gold));padding:.65rem 1.5rem;border-radius:100px;text-decoration:none;transition:all .3s;box-shadow:0 4px 15px rgba(42,124,124,.25)}
+        .h-resume:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(42,124,124,.35)}
+
+        /* ═══════════ S_EDU — EDUCATION ═══════════ */
+        #S_EDU{min-height:60vh;background:linear-gradient(180deg,#e8dfd0,#f4efe6);padding:8rem 0;position:relative;overflow:hidden}
+        .edu-inner{max-width:1100px;margin:0 auto;padding:0 6vw;display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:center}
+        .edu-tag{font-family:var(--fm);font-size:.68rem;color:var(--c3);letter-spacing:.25em;text-transform:uppercase;margin-bottom:1rem}
+        .edu-title{font-family:var(--fd);font-size:clamp(3rem,6vw,5.5rem);line-height:.92;letter-spacing:.04em;color:var(--c2)}
+        .edu-title em{font-family:var(--fs);font-style:italic;color:var(--c3);display:block;font-size:.75em}
+        .edu-card{background:rgba(255,255,255,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(42,124,124,.12);border-radius:18px;padding:2.5rem;position:relative;overflow:hidden;transition:transform .4s,box-shadow .4s}
+        .edu-card:hover{transform:translateY(-4px);box-shadow:0 16px 50px rgba(42,124,124,.1)}
+        .edu-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c3),var(--gold),var(--rose))}
+        .edu-icon{font-size:2.5rem;margin-bottom:1rem}
+        .edu-deg{font-family:var(--sy);font-size:1.15rem;color:var(--c2);margin-bottom:.3rem}
+        .edu-college{font-family:var(--fs);font-size:1rem;color:rgba(26,26,46,.55);font-style:italic;margin-bottom:1rem}
+        .edu-meta{display:flex;gap:2rem;flex-wrap:wrap}
+        .edu-pill{font-family:var(--fm);font-size:.68rem;padding:.45rem 1rem;border-radius:100px;background:rgba(42,124,124,.08);border:1px solid rgba(42,124,124,.15);color:var(--c3)}
+        .edu-cgpa{font-family:var(--fd);font-size:2.8rem;background:linear-gradient(135deg,var(--c3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+        .edu-cgpa-label{font-family:var(--fm);font-size:.6rem;color:rgba(26,26,46,.4);letter-spacing:.15em;text-transform:uppercase;margin-top:.2rem}
+        .edu-stats{display:flex;gap:2.5rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(42,124,124,.1)}
+
+        /* ═══════════ S_EXP — EXPERIENCE ═══════════ */
+        #S_EXP{min-height:60vh;background:linear-gradient(180deg,#0d1520,#1a1a2e);padding:8rem 0;position:relative;overflow:hidden}
+        .exp-inner{max-width:1000px;margin:0 auto;padding:0 6vw}
+        .exp-hd{margin-bottom:4rem}
+        .exp-tag{font-family:var(--fm);font-size:.68rem;color:var(--gold);letter-spacing:.25em;text-transform:uppercase;margin-bottom:.75rem}
+        .exp-title{font-family:var(--fd);font-size:clamp(3rem,7vw,6rem);color:#f4efe6;letter-spacing:.04em;line-height:.92}
+        .exp-title em{font-family:var(--fs);font-style:italic;color:var(--gold);display:block;font-size:.7em}
+        .exp-card{background:rgba(255,255,255,.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(201,169,110,.15);border-radius:16px;padding:2.25rem;margin-bottom:1.5rem;position:relative;overflow:hidden;transition:transform .4s,border-color .4s,box-shadow .4s;}
+        .exp-card:hover{border-color:rgba(201,169,110,.35);transform:translateX(-6px);box-shadow:12px 8px 40px rgba(0,0,0,.3)}
+        .exp-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transition:left .6s}
+        .exp-card:hover::before{left:100%}
+        .exp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.75rem;flex-wrap:wrap}
+        .exp-role{font-family:var(--sy);font-size:1.1rem;color:#f4efe6}
+        .exp-date{font-family:var(--fm);font-size:.65rem;color:rgba(244,239,230,.35);letter-spacing:.1em}
+        .exp-company{font-family:var(--fs);font-size:.95rem;color:var(--gold);font-style:italic;margin-bottom:.6rem}
+        .exp-desc{font-family:var(--fm);font-size:.72rem;color:rgba(244,239,230,.45);line-height:1.8}
+        .exp-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem}
+        .exp-tags span{font-family:var(--fm);font-size:.58rem;background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.2);color:rgba(201,169,110,.8);padding:.2rem .6rem;border-radius:100px}
+
+        @media (max-width:900px){
+            .edu-inner{grid-template-columns:1fr}
+            .philo-word{font-size:clamp(2.5rem,12vw,5rem)}
+            .story-aside{gap:1.5rem}
+            .story-fact{min-width:140px}
+            .h-socials{flex-wrap:wrap}
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="SPBAR"></div>
+    <div id="SLABEL"></div>
+    <a href="#S1" id="BTT" title="Back to top">↑</a>
+
+
+    <!-- LOADER -->
+    <div id="LOAD">
+        <div class="ld-title">
+            <span style="animation-delay:.0s">V</span><span style="animation-delay:.06s">E</span><span
+                style="animation-delay:.12s">D</span><span style="animation-delay:.18s">A</span><span
+                style="animation-delay:.24s">N</span><span style="animation-delay:.30s">T</span>
+        </div>
+        <div class="ld-line">
+            <div class="ld-prog" id="LP"></div>
+        </div>
+        <div class="ld-msg" id="LM">Initializing AI systems...</div>
+    </div>
+
+    <!-- NAV -->
+    <nav id="NAV">
+        <a href="#S1" class="nav-logo">VEDANT</a>
+        <ul class="nav-ul">
+            <li><a href="#S2">About</a></li>
+            <li><a href="#S3">Projects</a></li>
+            <li><a href="#S4">Stack</a></li>
+            <li><a href="#S_STORY">Story</a></li>
+            <li><a href="#S5">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ══ S1: HERO ══ -->
+    <section id="S1" data-section="hero" data-label="Home">
+        <canvas id="BGC"></canvas>
+        <div class="h-blob" style="width:500px;height:500px;background:rgba(42,124,124,.18);
+    top:-100px;right:5%;animation-duration:12s"></div>
+        <div class="h-blob" style="width:350px;height:350px;background:rgba(201,169,110,.15);
+    bottom:10%;right:20%;animation-duration:9s;animation-delay:-4s"></div>
+        <div class="h-blob" style="width:280px;height:280px;background:rgba(212,150,122,.12);
+    top:30%;left:10%;animation-duration:15s;animation-delay:-7s"></div>
+
+        <div class="h-wrap">
+            <div class="h-tag">AI &amp; Data Science · Computer Engineering</div>
+            <h1 class="h-name">
+                <span class="row"><span>I'm Vedant.</span></span>
+                <span class="row"><span>I Build</span></span>
+                <span class="row"><span><em
+                            style="font-family:'Instrument Serif',serif;font-style:italic;color:var(--c3)">Intelligence.</em></span></span>
+            </h1>
+        </div>
+        <div class="h-side">
+            <p class="h-desc">ML pipelines, data-driven apps, and systems that think — built from first principles.</p>
+            <a href="#S3" class="h-cta">See My Work →</a>
+            <a href="/resume.pdf" target="_blank" class="h-resume">📄 Resume</a>
+            <a href="mailto:vedantkolhapure111@gmail.com" class="h-email">vedantkolhapure111@gmail.com</a>
+            <div class="h-socials">
+                <a href="https://linkedin.com/in/vedant" target="_blank" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+                <a href="https://github.com/vedant" target="_blank" title="GitHub"><svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+            </div>
+        </div>
+        <div class="h-scroll">Scroll</div>
+    </section>
+
+    <!-- ══ S2: ABOUT ══ -->
+    <section id="S2" data-section="about" data-label="About">
+        <div class="s2-diag"></div>
+        <div class="swm">02</div>
+        <div class="s2-inner">
+            <div class="s2-l">
+                <div class="s2-photo-wrap rx">
+                    <div class="s2-photo-accent"></div>
+                    <div class="s2-photo">
+                        <img src="photo.jpg" alt="Vedant Kolhapure">
+                        <span class="s2-photo-label">Vedant K.</span>
+                    </div>
+                    <div class="s2-photo-dot d1"></div>
+                    <div class="s2-photo-dot d2"></div>
+                </div>
+                <div class="s2-tag rx">System Profile</div>
+                <h2 class="s2-h rx d1">The<br>Human<br><em>Behind It</em></h2>
+                <p class="s2-p rx d2">
+                    <strong>Computer Engineering student</strong>, specializing in AI & Data Science.
+                    I turn raw data into elegant models and rough ideas into
+                    <strong>working products</strong> — equally at home writing
+                    a Random Forest or a CSS transition.
+                </p>
+            </div>
+            <div class="s2-r">
+                <div class="fc rx d1">
+                    <div class="fc-icon">🧠</div>
+                    <div class="fc-t">Machine Learning</div>
+                    <div class="fc-b">Supervised learning · Feature engineering · XGBoost · Random Forest · Model
+                        pipelines</div>
+                </div>
+                <div class="fc rx d2">
+                    <div class="fc-icon">📊</div>
+                    <div class="fc-t">Data Science</div>
+                    <div class="fc-b">EDA · Pandas · NumPy · Statistical analysis · Preprocessing · Visualization</div>
+                </div>
+                <div class="fc rx d3">
+                    <div class="fc-icon">🌐</div>
+                    <div class="fc-t">Full Stack Web</div>
+                    <div class="fc-b">Flask REST APIs · JavaScript · HTML/CSS · Jinja2 · Responsive UI</div>
+                </div>
+                <div class="fc rx d4">
+                    <div class="fc-nums">
+                        <div class="fc-n">
+                            <div class="fc-num" data-count="4" data-suffix="+">0</div>
+                            <div class="fc-nl">Projects</div>
+                        </div>
+                        <div class="fc-n">
+                            <div class="fc-num" data-count="10" data-suffix="+">0</div>
+                            <div class="fc-nl">Technologies</div>
+                        </div>
+                        <div class="fc-n">
+                            <div class="fc-num" data-count="2" data-suffix="">0</div>
+                            <div class="fc-nl">Active Clubs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="s2-diag-b"></div>
+    </section>
+
+    <!-- ══ PHILOSOPHY — PINNED TEXT SCALE ══ -->
+    <section id="S_PHILO" data-section="philosophy" data-label="Philosophy">
+        <div class="philo-bg-text">THINK</div>
+        <div class="philo-pin">
+            <div class="philo-tag">My Philosophy</div>
+            <span class="philo-word pw1">Data In.</span>
+            <span class="philo-word pw2"><em>Intelligence</em></span>
+            <span class="philo-word pw3">Out.</span>
+            <p class="philo-sub">I don't just build models — I engineer understanding. Every pipeline is a bridge between chaos and clarity.</p>
+            <div class="philo-line"></div>
+        </div>
+    </section>
+
+    <!-- ══ MARQUEE BAND ══ -->
+    <div class="marq-wrap">
+        <div class="marq-track">
+            <span class="marq-item hi">Machine Learning</span><span class="marq-sep">✦</span>
+            <span class="marq-item">Data Science</span><span class="marq-sep">✦</span>
+            <span class="marq-item hi">Python</span><span class="marq-sep">✦</span>
+            <span class="marq-item">NLP &amp; Text Analysis</span><span class="marq-sep">✦</span>
+            <span class="marq-item hi">Flask APIs</span><span class="marq-sep">✦</span>
+            <span class="marq-item">XGBoost</span><span class="marq-sep">✦</span>
+            <span class="marq-item hi">Neural Networks</span><span class="marq-sep">✦</span>
+            <span class="marq-item">Computer Engineering</span><span class="marq-sep">✦</span>
+            <span class="marq-item hi">Open to Internships</span><span class="marq-sep">✦</span>
+            <span class="marq-item">AI Systems</span><span class="marq-sep">✦</span>
+            <span class="marq-item hi">Machine Learning</span><span class="marq-sep">✦</span>
+            <span class="marq-item">Data Science</span><span class="marq-sep">✦</span>
+            <span class="marq-item hi">Python</span><span class="marq-sep">✦</span>
+            <span class="marq-item">NLP &amp; Text Analysis</span><span class="marq-sep">✦</span>
+            <span class="marq-item hi">Flask APIs</span><span class="marq-sep">✦</span>
+            <span class="marq-item">XGBoost</span><span class="marq-sep">✦</span>
+            <span class="marq-item hi">Neural Networks</span><span class="marq-sep">✦</span>
+            <span class="marq-item">Computer Engineering</span><span class="marq-sep">✦</span>
+            <span class="marq-item hi">Open to Internships</span><span class="marq-sep">✦</span>
+            <span class="marq-item">AI Systems</span><span class="marq-sep">✦</span>
+        </div>
+    </div>
+
+    <!-- ══ S3: PROJECTS ══ -->
+    <section id="S3" data-section="projects" data-label="Projects">
+        <div class="s3-bg"></div>
+        <div class="s3-hd rx">
+            <div class="s3-tag">Selected Work</div>
+            <h2 class="s3-title">Projects<em>that shipped</em></h2>
+        </div>
+        <div class="c-scene">
+            <div class="c-track" id="CT">
+                <div class="pc curr">
+                    <div class="pc-no">01</div>
+                    <div class="pc-ic">🎓</div>
+                    <div class="pc-t">Student Performance Predictor</div>
+                    <p class="pc-d">End-to-end ML pipeline predicting academic outcomes from socioeconomic &amp;
+                        behavioral features. Linear Regression vs Random Forest vs XGBoost.</p>
+                    <div class="pc-tags"><span class="ptag">Python</span><span class="ptag">Scikit-learn</span><span
+                            class="ptag">XGBoost</span><span class="ptag">Pandas</span><span class="ptag">EDA</span>
+                    </div>
+                    <a href="#" class="pc-link">Case Study →</a>
+                </div>
+                <div class="pc next1">
+                    <div class="pc-no">02</div>
+                    <div class="pc-ic">🎬</div>
+                    <div class="pc-t">Movie Recommendation Engine</div>
+                    <p class="pc-d">Content-based filtering with NLP — TF-IDF vectorization and cosine similarity.
+                        Cold-start resistant, no user history required.</p>
+                    <div class="pc-tags"><span class="ptag">NLP</span><span class="ptag">TF-IDF</span><span
+                            class="ptag">Python</span><span class="ptag">Cosine Sim</span></div>
+                    <a href="#" class="pc-link">Case Study →</a>
+                </div>
+                <div class="pc next2">
+                    <div class="pc-no">03</div>
+                    <div class="pc-ic">📚</div>
+                    <div class="pc-t">Book Recommendation App</div>
+                    <p class="pc-d">Full-stack Flask application serving smart book suggestions. ML model deployed via
+                        REST endpoints with a clean, responsive frontend.</p>
+                    <div class="pc-tags"><span class="ptag">Flask</span><span class="ptag">Python</span><span
+                            class="ptag">ML</span><span class="ptag">Jinja2</span></div>
+                    <a href="#" class="pc-link">Case Study →</a>
+                </div>
+                <div class="pc" style="opacity:0;pointer-events:none">
+                    <div class="pc-no">04</div>
+                    <div class="pc-ic">🌐</div>
+                    <div class="pc-t">Full-Stack Web Projects</div>
+                    <p class="pc-d">Responsive, interactive web apps — JavaScript, HTML5/CSS3, Flask. API integration,
+                        dynamic rendering, and mobile-first design patterns.</p>
+                    <div class="pc-tags"><span class="ptag">JavaScript</span><span class="ptag">HTML/CSS</span><span
+                            class="ptag">Flask</span><span class="ptag">REST</span></div>
+                    <a href="#" class="pc-link">Case Study →</a>
+                </div>
+            </div>
+        </div>
+        <div class="c-controls">
+            <button class="c-btn" id="CPV">←</button>
+            <div class="c-dots" id="CDOTS"></div>
+            <button class="c-btn" id="CNX">→</button>
+        </div>
+    </section>
+
+    <!-- ══ S4: STACK ══ -->
+    <section id="S4" data-section="stack" data-label="Stack">
+        <div class="s4-wrap">
+            <div class="s4-hd s4-l">
+                <div class="s4-tag rx">The Toolkit</div>
+                <h2 class="s4-h rx d1">Core <em>Arsenal</em></h2>
+            </div>
+            <div class="ticker-wall">
+                <div class="ticker-row">
+                    <div class="ticker-track">
+                        <div class="tk"><span class="tk-icon">🐍</span><div><div class="tk-name">Python</div><div class="tk-cat">Language</div></div></div>
+                        <div class="tk"><span class="tk-icon">🧠</span><div><div class="tk-name">Scikit-learn</div><div class="tk-cat">ML</div></div></div>
+                        <div class="tk"><span class="tk-icon">🌲</span><div><div class="tk-name">XGBoost</div><div class="tk-cat">ML</div></div></div>
+                        <div class="tk"><span class="tk-icon">📊</span><div><div class="tk-name">Pandas</div><div class="tk-cat">Data</div></div></div>
+                        <div class="tk"><span class="tk-icon">🔢</span><div><div class="tk-name">NumPy</div><div class="tk-cat">Data</div></div></div>
+                        <div class="tk"><span class="tk-icon">📈</span><div><div class="tk-name">Matplotlib</div><div class="tk-cat">Viz</div></div></div>
+                        <div class="tk"><span class="tk-icon">🐍</span><div><div class="tk-name">Python</div><div class="tk-cat">Language</div></div></div>
+                        <div class="tk"><span class="tk-icon">🧠</span><div><div class="tk-name">Scikit-learn</div><div class="tk-cat">ML</div></div></div>
+                        <div class="tk"><span class="tk-icon">🌲</span><div><div class="tk-name">XGBoost</div><div class="tk-cat">ML</div></div></div>
+                        <div class="tk"><span class="tk-icon">📊</span><div><div class="tk-name">Pandas</div><div class="tk-cat">Data</div></div></div>
+                        <div class="tk"><span class="tk-icon">🔢</span><div><div class="tk-name">NumPy</div><div class="tk-cat">Data</div></div></div>
+                        <div class="tk"><span class="tk-icon">📈</span><div><div class="tk-name">Matplotlib</div><div class="tk-cat">Viz</div></div></div>
+                    </div>
+                </div>
+                <div class="ticker-row rev">
+                    <div class="ticker-track">
+                        <div class="tk"><span class="tk-icon">🌐</span><div><div class="tk-name">JavaScript</div><div class="tk-cat">Web</div></div></div>
+                        <div class="tk"><span class="tk-icon">🎨</span><div><div class="tk-name">HTML/CSS</div><div class="tk-cat">Web</div></div></div>
+                        <div class="tk"><span class="tk-icon">🌶️</span><div><div class="tk-name">Flask</div><div class="tk-cat">Backend</div></div></div>
+                        <div class="tk"><span class="tk-icon">📄</span><div><div class="tk-name">Jinja2</div><div class="tk-cat">Template</div></div></div>
+                        <div class="tk"><span class="tk-icon">🔗</span><div><div class="tk-name">REST API</div><div class="tk-cat">Backend</div></div></div>
+                        <div class="tk"><span class="tk-icon">🗄️</span><div><div class="tk-name">SQL</div><div class="tk-cat">Database</div></div></div>
+                        <div class="tk"><span class="tk-icon">🌐</span><div><div class="tk-name">JavaScript</div><div class="tk-cat">Web</div></div></div>
+                        <div class="tk"><span class="tk-icon">🎨</span><div><div class="tk-name">HTML/CSS</div><div class="tk-cat">Web</div></div></div>
+                        <div class="tk"><span class="tk-icon">🌶️</span><div><div class="tk-name">Flask</div><div class="tk-cat">Backend</div></div></div>
+                        <div class="tk"><span class="tk-icon">📄</span><div><div class="tk-name">Jinja2</div><div class="tk-cat">Template</div></div></div>
+                        <div class="tk"><span class="tk-icon">🔗</span><div><div class="tk-name">REST API</div><div class="tk-cat">Backend</div></div></div>
+                        <div class="tk"><span class="tk-icon">🗄️</span><div><div class="tk-name">SQL</div><div class="tk-cat">Database</div></div></div>
+                    </div>
+                </div>
+                <div class="ticker-row">
+                    <div class="ticker-track">
+                        <div class="tk"><span class="tk-icon">⚡</span><div><div class="tk-name">C++</div><div class="tk-cat">Language</div></div></div>
+                        <div class="tk"><span class="tk-icon">💬</span><div><div class="tk-name">NLP</div><div class="tk-cat">AI</div></div></div>
+                        <div class="tk"><span class="tk-icon">🔀</span><div><div class="tk-name">Git</div><div class="tk-cat">Tools</div></div></div>
+                        <div class="tk"><span class="tk-icon">📉</span><div><div class="tk-name">EDA</div><div class="tk-cat">Data</div></div></div>
+                        <div class="tk"><span class="tk-icon">🎯</span><div><div class="tk-name">Feature Eng.</div><div class="tk-cat">ML</div></div></div>
+                        <div class="tk"><span class="tk-icon">🌳</span><div><div class="tk-name">Random Forest</div><div class="tk-cat">ML</div></div></div>
+                        <div class="tk"><span class="tk-icon">⚡</span><div><div class="tk-name">C++</div><div class="tk-cat">Language</div></div></div>
+                        <div class="tk"><span class="tk-icon">💬</span><div><div class="tk-name">NLP</div><div class="tk-cat">AI</div></div></div>
+                        <div class="tk"><span class="tk-icon">🔀</span><div><div class="tk-name">Git</div><div class="tk-cat">Tools</div></div></div>
+                        <div class="tk"><span class="tk-icon">📉</span><div><div class="tk-name">EDA</div><div class="tk-cat">Data</div></div></div>
+                        <div class="tk"><span class="tk-icon">🎯</span><div><div class="tk-name">Feature Eng.</div><div class="tk-cat">ML</div></div></div>
+                        <div class="tk"><span class="tk-icon">🌳</span><div><div class="tk-name">Random Forest</div><div class="tk-cat">ML</div></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ EDUCATION ══ -->
+    <section id="S_EDU" data-section="education" data-label="Education">
+        <div class="edu-inner">
+            <div>
+                <div class="edu-tag">Academic Foundation</div>
+                <h2 class="edu-title">Edu<br><em>cation</em></h2>
+            </div>
+            <div class="edu-card">
+                <div class="edu-icon">🎓</div>
+                <div class="edu-deg">B.E. Computer Engineering</div>
+                <div class="edu-college">Specialization in AI & Data Science</div>
+                <div class="edu-meta">
+                    <div class="edu-pill">2023 — Present</div>
+                    <div class="edu-pill">Pune, India</div>
+                </div>
+                <div class="edu-stats">
+                    <div>
+                        <div class="edu-cgpa" data-count="8.5" data-suffix="">0</div>
+                        <div class="edu-cgpa-label">CGPA</div>
+                    </div>
+                    <div>
+                        <div class="edu-cgpa" data-count="2" data-suffix="nd" style="font-size:2rem">0</div>
+                        <div class="edu-cgpa-label">Year</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ EXPERIENCE ══ -->
+    <section id="S_EXP" data-section="experience" data-label="Experience">
+        <div class="exp-inner">
+            <div class="exp-hd">
+                <div class="exp-tag">Work & Internships</div>
+                <h2 class="exp-title">Exper<br><em>ience</em></h2>
+            </div>
+            <div class="exp-card">
+                <div class="exp-top">
+                    <div class="exp-role">AI/ML Intern</div>
+                    <div class="exp-date">Jun 2024 — Aug 2024</div>
+                </div>
+                <div class="exp-company">Company Name</div>
+                <div class="exp-desc">Worked on developing machine learning pipelines for predictive analytics. Built data preprocessing modules, trained classification models, and deployed APIs using Flask for real-time inference.</div>
+                <div class="exp-tags">
+                    <span>Python</span><span>Scikit-learn</span><span>Flask</span><span>Pandas</span><span>REST API</span>
+                </div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-top">
+                    <div class="exp-role">Web Development Intern</div>
+                    <div class="exp-date">Jan 2024 — Mar 2024</div>
+                </div>
+                <div class="exp-company">Company Name</div>
+                <div class="exp-desc">Designed and developed responsive web applications using modern frontend technologies. Implemented dynamic features, API integrations, and optimized performance for production deployment.</div>
+                <div class="exp-tags">
+                    <span>HTML/CSS</span><span>JavaScript</span><span>Flask</span><span>Jinja2</span><span>MySQL</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ MY STORY ══ -->
+    <section id="S_STORY" data-section="story" data-label="Story">
+        <div class="story-bg-num">ME</div>
+        <div class="story-inner">
+            <div class="story-tag">Beyond The Code</div>
+            <h2 class="story-title">My <em>Story</em></h2>
+
+            <p class="story-line sl">I’m a Computer Engineering student who fell in love with <span class="hl">data</span> before I could spell “regression.”</p>
+            <p class="story-line sl">What started as curiosity about <span class="hl">how machines learn</span> quickly became an obsession with building things that actually work.</p>
+            <p class="story-line sl">I don’t just train models — I <span class="hl">engineer solutions</span>. From raw CSVs to deployed Flask APIs, I own every layer of the stack.</p>
+
+            <div class="story-divider"></div>
+
+            <p class="story-line sl">When I’m not debugging pipelines, you’ll find me exploring new <span class="hl">research papers</span>, experimenting with side projects, or obsessing over clean UI.</p>
+            <p class="story-line sl">I believe the best engineers are the ones who <span class="hl">never stop being students</span> — and I’m just getting started.</p>
+            <p class="story-line sl">Currently seeking <span class="hl">internship opportunities</span> where I can contribute, learn, and build something meaningful.</p>
+
+            <div class="story-aside">
+                <div class="story-fact">
+                    <div class="sf-emoji">☕</div>
+                    <div class="sf-label">Fuel</div>
+                    <div class="sf-val">Coffee & curiosity</div>
+                </div>
+                <div class="story-fact">
+                    <div class="sf-emoji">🎯</div>
+                    <div class="sf-label">Focus</div>
+                    <div class="sf-val">AI & Data Science</div>
+                </div>
+                <div class="story-fact">
+                    <div class="sf-emoji">💡</div>
+                    <div class="sf-label">Motto</div>
+                    <div class="sf-val">Ship it, then polish it</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ DIVIDER: Available ══ -->
+    <div style="background:var(--c3);padding:3.5rem 6vw;overflow:hidden;position:relative">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,7vw,5.5rem);
+    color:rgba(255,255,255,0.12);position:absolute;top:50%;right:4vw;
+    transform:translateY(-50%);letter-spacing:.1em;pointer-events:none;user-select:none">
+            LET'S BUILD
+        </div>
+        <div style="position:relative;z-index:1;display:flex;align-items:center;
+    justify-content:space-between;flex-wrap:wrap;gap:2rem">
+            <div>
+                <div style="font-family:'DM Mono',monospace;font-size:.72rem;
+        color:rgba(255,255,255,.6);letter-spacing:.2em;
+        text-transform:uppercase;margin-bottom:.5rem">Current Status</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.5rem);
+        color:#fff;letter-spacing:.04em;line-height:1">
+                    Open to Internships
+                </div>
+                <div style="font-family:'Instrument Serif',serif;font-style:italic;
+        font-size:1.1rem;color:rgba(255,255,255,.65);margin-top:.4rem">
+                    AI · Data Science · Full Stack
+                </div>
+            </div>
+            <a href="#S5" style="display:inline-flex;align-items:center;gap:.75rem;
+      font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.15em;
+      text-transform:uppercase;color:#fff;text-decoration:none;
+      padding:1rem 2.25rem;border:1.5px solid rgba(255,255,255,.4);border-radius:100px;
+      transition:all .3s;" onmouseover="this.style.background='rgba(255,255,255,.15)'"
+                onmouseout="this.style.background='transparent'">
+                Get in Touch →
+            </a>
+        </div>
+    </div>
+
+    <!-- ══ S5: CONTACT ══ -->
+    <section id="S5" data-section="contact" data-label="Contact">
+        <div class="s5l">
+            <div class="s5-label rx">Get in Touch</div>
+            <h2 class="s5-h rx d1">Say<br><em>Hello.</em></h2>
+            <p class="s5-p rx d2">Open to internships, research collabs, and interesting conversations about AI and
+                data.</p>
+            <div class="links rx d3">
+                <a href="mailto:vedant@email.com" class="lk">
+                    <div class="lk-icon">✉</div>
+                    <div class="lk-txt">
+                        <span class="lk-type">Email</span>
+                        <span class="lk-val">vedant@email.com</span>
+                    </div>
+                    <span class="lk-arr">→</span>
+                </a>
+                <a href="https://linkedin.com/in/vedant" target="_blank" class="lk">
+                    <div class="lk-icon">in</div>
+                    <div class="lk-txt">
+                        <span class="lk-type">LinkedIn</span>
+                        <span class="lk-val">linkedin.com/in/vedant</span>
+                    </div>
+                    <span class="lk-arr">→</span>
+                </a>
+                <a href="https://github.com/vedant" target="_blank" class="lk">
+                    <div class="lk-icon">⌥</div>
+                    <div class="lk-txt">
+                        <span class="lk-type">GitHub</span>
+                        <span class="lk-val">github.com/vedant</span>
+                    </div>
+                    <span class="lk-arr">→</span>
+                </a>
+            </div>
+        </div>
+        <div class="s5r">
+            <div class="term rx d2">
+                <div class="t-bar">
+                    <div class="td"></div>
+                    <div class="td"></div>
+                    <div class="td"></div>
+                    <span class="t-ttl">vedant@portfolio — zsh</span>
+                </div>
+                <div class="t-body">
+                    <div><span class="tp">vedant@portfolio</span> <span>$ whoami</span></div>
+                    <div class="to">→ AI Engineer. Loves data, hates boring portfolios.</div>
+                    <div>&nbsp;</div>
+                    <div><span class="tp">vedant@portfolio</span> <span>$ status</span></div>
+                    <div class="ts">→ 🟢 Open to internships &amp; collaborations</div>
+                    <div>&nbsp;</div>
+                    <div class="to">→ Try: <em>help · skills · hire · projects</em></div>
+                    <span id="TRES" class="to">&nbsp;</span>
+                </div>
+                <div class="t-in-row">
+                    <span class="t-pr">$</span>
+                    <input class="t-in" id="TIN" placeholder="enter a command..." autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <span class="f-l">VEDANT</span>
+        <span class="f-r">© 2025 · No templates. Just code.</span>
+        <span class="f-r" style="font-size:.55rem;opacity:.4">Built with ☕ and curiosity</span>
+    </footer>
+
+    <script>
+
+
+        /* ─── LOADER ─── */
+        const msgs = ['Initializing AI systems...', 'Compiling neural layers...', 'Loading 3D scene...', 'All systems operational.'];
+        let li = 0;
+        const lp = document.getElementById('LP'), lm = document.getElementById('LM');
+        setTimeout(() => { if (lp) lp.style.width = '100%' }, 80);
+        const lt = setInterval(() => {
+            li = Math.min(li + 1, msgs.length - 1);
+            if (lm) lm.textContent = msgs[li];
+            if (li === msgs.length - 1) clearInterval(lt);
+        }, 620);
+        setTimeout(() => {
+            const L = document.getElementById('LOAD');
+            if (L) { L.classList.add('out'); setTimeout(() => L.remove(), 1200) }
+        }, 2800);
+
+        /* ─── THREE.JS HERO ─── */
+        (() => {
+            const cv = document.getElementById('BGC');
+            if (!cv || typeof THREE === 'undefined') return;
+            const W = () => window.innerWidth, H = () => window.innerHeight;
+            const rdr = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+            rdr.setPixelRatio(Math.min(devicePixelRatio, 2));
+            rdr.setSize(W(), H());
+            rdr.setClearColor(0x000000, 0);
+            const sc = new THREE.Scene();
+            const cam = new THREE.PerspectiveCamera(55, W() / H(), .1, 600);
+            cam.position.set(0, 0, 34);
+
+            /* Background soft gradient mesh via plane */
+            const pgeo = new THREE.PlaneGeometry(200, 100);
+            const pmat = new THREE.ShaderMaterial({
+                uniforms: { time: { value: 0 } },
+                vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+                fragmentShader: `
+      uniform float time;
+      varying vec2 vUv;
+      void main(){
+        float r=0.957+0.02*sin(vUv.x*3.0+time*.3);
+        float g=0.937+0.015*sin(vUv.y*2.0+time*.4);
+        float b=0.902-0.03*sin((vUv.x+vUv.y)*2.0+time*.2);
+        gl_FragColor=vec4(r,g,b,1.0);
+      }`,
+                transparent: false, side: THREE.FrontSide
+            });
+            const plane = new THREE.Mesh(pgeo, pmat);
+            plane.position.z = -30;
+            sc.add(plane);
+
+            /* Large wireframe crystal */
+            const ig = new THREE.IcosahedronGeometry(7, 1);
+            const im = new THREE.MeshBasicMaterial({ color: 0x2a7c7c, wireframe: true, transparent: true, opacity: .15 });
+            const ico = new THREE.Mesh(ig, im);
+            ico.position.set(13, 0, -8); sc.add(ico);
+
+            /* Octahedron */
+            const og = new THREE.OctahedronGeometry(4.5);
+            const om = new THREE.MeshBasicMaterial({ color: 0xc9a96e, wireframe: true, transparent: true, opacity: .2 });
+            const oct = new THREE.Mesh(og, om);
+            oct.position.set(-12, 2, -5); sc.add(oct);
+
+            /* Small tetra */
+            const tg = new THREE.TetrahedronGeometry(2.5);
+            const tm = new THREE.MeshBasicMaterial({ color: 0x7c6aad, wireframe: true, transparent: true, opacity: .25 });
+            const tet = new THREE.Mesh(tg, tm);
+            tet.position.set(4, -5, -2); sc.add(tet);
+
+            /* Torus */
+            const trg = new THREE.TorusGeometry(3.5, 0.15, 8, 40);
+            const trm = new THREE.MeshBasicMaterial({ color: 0xd4967a, transparent: true, opacity: .18 });
+            const tor = new THREE.Mesh(trg, trm);
+            tor.position.set(-5, 5, -10); tor.rotation.x = 1.2; sc.add(tor);
+
+            /* Particles with warm palette */
+            const cnt = 1400, pos = new Float32Array(cnt * 3), col = new Float32Array(cnt * 3);
+            const pal = [[0.16, 0.49, 0.49], [0.79, 0.66, 0.43], [0.96, 0.94, 0.9], [0.83, 0.59, 0.48], [0.49, 0.42, 0.68]];
+            for (let i = 0; i < cnt; i++) {
+                pos[i * 3] = (Math.random() - .5) * 110; pos[i * 3 + 1] = (Math.random() - .5) * 60; pos[i * 3 + 2] = (Math.random() - .5) * 35;
+                const p = pal[Math.floor(Math.random() * pal.length)];
+                col[i * 3] = p[0]; col[i * 3 + 1] = p[1]; col[i * 3 + 2] = p[2];
+            }
+            const pg2 = new THREE.BufferGeometry();
+            pg2.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            pg2.setAttribute('color', new THREE.BufferAttribute(col, 3));
+            sc.add(new THREE.Points(pg2, new THREE.PointsMaterial({ size: .09, vertexColors: true, transparent: true, opacity: .55 })));
+
+            /* Neural nodes */
+            const nps = [];
+            for (let i = 0; i < 12; i++) {
+                const g = new THREE.SphereGeometry(.14 + Math.random() * .16, 6, 6);
+                const m = new THREE.MeshBasicMaterial({ color: i % 3 === 0 ? 0x2a7c7c : i % 3 === 1 ? 0xc9a96e : 0x7c6aad, transparent: true, opacity: .75 });
+                const mesh = new THREE.Mesh(g, m);
+                const p = { x: (Math.random() - .5) * 36, y: (Math.random() - .5) * 18, z: (Math.random() - .5) * 12 };
+                mesh.position.set(p.x, p.y, p.z); nps.push(p); sc.add(mesh);
+            }
+            for (let i = 0; i < nps.length; i++) {
+                for (let j = i + 1; j < nps.length; j++) {
+                    const d = Math.sqrt((nps[i].x - nps[j].x) ** 2 + (nps[i].y - nps[j].y) ** 2);
+                    if (d < 16) {
+                        const lg = new THREE.BufferGeometry().setFromPoints([
+                            new THREE.Vector3(nps[i].x, nps[i].y, nps[i].z),
+                            new THREE.Vector3(nps[j].x, nps[j].y, nps[j].z)
+                        ]);
+                        sc.add(new THREE.Line(lg, new THREE.LineBasicMaterial({ color: 0x2a7c7c, transparent: true, opacity: .07 })));
+                    }
+                }
+            }
+
+            let pmx = 0, pmy = 0;
+            document.addEventListener('mousemove', e => { pmx = (e.clientX / W() - .5) * 2; pmy = (e.clientY / H() - .5) * 2 });
+            window.addEventListener('resize', () => { rdr.setSize(W(), H()); cam.aspect = W() / H(); cam.updateProjectionMatrix() });
+
+            const clk = new THREE.Clock();
+            function draw() {
+                requestAnimationFrame(draw);
+                const t = clk.getElapsedTime();
+                pmat.uniforms.time.value = t;
+                ico.rotation.y = t * .12; ico.rotation.x = t * .07;
+                oct.rotation.y = -t * .16; oct.rotation.z = t * .09;
+                tet.rotation.x = t * .22; tet.rotation.z = t * .15;
+                tor.rotation.z = t * .08; tor.rotation.y = t * .12;
+                cam.position.x += (pmx * 3.5 - cam.position.x) * .04;
+                cam.position.y += (-pmy * 2.5 - cam.position.y) * .04;
+                cam.lookAt(0, 0, 0);
+                rdr.render(sc, cam);
+            }
+            draw();
+        })();
+
+        /* ─── REVEAL (for elements NOT controlled by scroll engine) ─── */
+        const ro = new IntersectionObserver(es => {
+            es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); ro.unobserve(e.target) } });
+        }, { threshold: .1 });
+        document.querySelectorAll('.rx').forEach(el => ro.observe(el));
+
+        /* ─── 3D CAROUSEL ─── */
+        const cards = [...document.querySelectorAll('.pc')];
+        const CLASSES = ['prev2', 'prev1', 'curr', 'next1', 'next2'];
+        let cur = 0;
+        const dotsEl = document.getElementById('CDOTS');
+        cards.forEach((_, i) => {
+            const d = document.createElement('div');
+            d.className = 'cdot' + (i === 0 ? ' on' : '');
+            d.onclick = () => goCard(i);
+            dotsEl.appendChild(d);
+        });
+        function setClasses() {
+            cards.forEach((c, i) => {
+                c.className = 'pc';
+                const off = i - cur;
+                if (off === -2 || off === cards.length - 2) c.classList.add('prev2');
+                else if (off === -1 || off === cards.length - 1) c.classList.add('prev1');
+                else if (off === 0) c.classList.add('curr');
+                else if (off === 1 || off === -(cards.length - 1)) c.classList.add('next1');
+                else if (off === 2 || off === -(cards.length - 2)) c.classList.add('next2');
+                else { c.style.opacity = '0'; c.style.pointerEvents = 'none' }
+            });
+            [...dotsEl.children].forEach((d, i) => d.classList.toggle('on', i === cur));
+        }
+        function goCard(n) { cur = (n + cards.length) % cards.length; setClasses() }
+        document.getElementById('CNX').onclick = () => goCard(cur + 1);
+        document.getElementById('CPV').onclick = () => goCard(cur - 1);
+
+        /* ─── TERMINAL ─── */
+        const CMDS = {
+            help: '→ Commands: whoami · status · skills · hire · contact · projects · ls',
+            whoami: '→ Vedant — Computer Engineering student, AI & Data Science specialist',
+            status: '→ 🟢 Available for internships and research collaborations',
+            skills: '→ Python · ML · NLP · Flask · C++ · JavaScript · Scikit-learn · Pandas · XGBoost',
+            contact: '→ vedant@email.com | linkedin.com/in/vedant | github.com/vedant',
+            hire: '→ Excellent choice. Email vedant@email.com — reply within 24 hours.',
+            projects: '→ Predictor · Movie Rec · Book App · Full-Stack Web',
+            ls: '→ about/  projects/  stack/  contact/',
+            pwd: '→ /vedant/portfolio/',
+            clear: 'CLEAR',
+        };
+        const tin = document.getElementById('TIN'), tres = document.getElementById('TRES');
+        if (tin) {
+            tin.addEventListener('keydown', e => {
+                if (e.key !== 'Enter') return;
+                const v = tin.value.trim().toLowerCase();
+                if (!v) return;
+                const r = CMDS[v];
+                if (r === 'CLEAR') { if (tres) tres.textContent = '\xa0' }
+                else if (tres) {
+                    tres.textContent = r || (v ? `→ Unknown: "${v}" — try 'help'` : '');
+                    tres.className = CMDS[v] && CMDS[v] !== 'CLEAR' ? 'ts' : 'te';
+                }
+                tin.value = '';
+            });
+        }
+
+        /* ─── 3D CARD TILT ─── */
+        document.querySelectorAll('.fc,.pc,.term').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const r = card.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - .5;
+                const y = (e.clientY - r.top) / r.height - .5;
+                card.style.transform = `perspective(900px) rotateX(${-y * 12}deg) rotateY(${x * 14}deg) translateZ(10px) scale(1.02)`;
+                card.style.boxShadow = `${x * -20}px ${y * -20}px 40px rgba(0,0,0,.25),0 20px 60px rgba(0,0,0,.2)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+                card.style.boxShadow = '';
+            });
+        });
+
+        /* ═══ GSAP + SCROLLTRIGGER ENGINE ═══ */
+        (() => {
+            gsap.registerPlugin(ScrollTrigger);
+            const nav = document.getElementById('NAV');
+
+            // ── Remove .rx from elements GSAP will control ──
+            ['.s2-h','.s2-tag','.s2-p','.s2-photo-wrap','.s3-hd','.s4-h','.s4-tag','.s5-h','.s5-label','.term'].forEach(sel => {
+                const el = document.querySelector(sel);
+                if (el) { el.classList.remove('rx','d1','d2','d3','d4'); el.style.transition = 'none'; }
+            });
+            document.querySelectorAll('#S2 .fc').forEach(c => {
+                c.classList.remove('rx','d1','d2','d3','d4'); c.style.transition = 'none';
+            });
+
+            /* ═══ 1. HERO — pinned, content recedes ═══ */
+            const heroTL = gsap.timeline({
+                scrollTrigger: { trigger: '#S1', start: 'top top', end: 'bottom top', scrub: 1.2, pin: false }
+            });
+            heroTL
+                .to('.h-wrap', { y: 200, rotateX: 14, scale: 0.8, opacity: 0, ease: 'power2.in' }, 0)
+                .to('.h-side', { y: 120, x: 70, opacity: 0, ease: 'power2.in' }, 0)
+                .to('#BGC', { y: 250, scale: 1.15, ease: 'none' }, 0)
+                .to('.h-scroll', { opacity: 0, y: -30 }, 0);
+
+            /* ═══ 2. S2 ABOUT — heading rotates in, cards stagger-flip ═══ */
+            gsap.from('.s2-tag', {
+                x: -60, opacity: 0,
+                scrollTrigger: { trigger: '#S2', start: 'top 75%', end: 'top 35%', scrub: 1 }
+            });
+            gsap.from('.s2-photo-wrap', {
+                scale: 0.75, opacity: 0, rotateY: -15, x: -40,
+                scrollTrigger: { trigger: '#S2', start: 'top 80%', end: 'top 40%', scrub: 1.2 }
+            });
+            gsap.from('.s2-h', {
+                rotateY: 35, rotateX: -12, x: -100, opacity: 0,
+                scrollTrigger: { trigger: '#S2', start: 'top 70%', end: 'top 25%', scrub: 1.2 }
+            });
+            gsap.from('.s2-p', {
+                y: 50, opacity: 0,
+                scrollTrigger: { trigger: '#S2', start: 'top 60%', end: 'top 25%', scrub: 1 }
+            });
+            gsap.from('#S2 .fc', {
+                rotateX: 20, rotateY: -25, y: 60, opacity: 0,
+                stagger: 0.15, duration: 1,
+                scrollTrigger: { trigger: '.s2-r', start: 'top 80%', end: 'top 20%', scrub: 1.5 }
+            });
+
+            /* ═══ 3. MARQUEE — tilts in ═══ */
+            gsap.from('.marq-wrap', {
+                rotateX: -12, scaleX: 0.85, opacity: 0.1,
+                scrollTrigger: { trigger: '.marq-wrap', start: 'top 90%', end: 'top 50%', scrub: 1 }
+            });
+
+            /* ═══ 4. S3 PROJECTS — title scales up and rotates ═══ */
+            gsap.from('.s3-hd', {
+                rotateX: -30, scale: 0.6, y: 60, opacity: 0,
+                scrollTrigger: { trigger: '#S3', start: 'top 75%', end: 'top 25%', scrub: 1.2 }
+            });
+
+            /* ═══ 5. S4 STACK — ticker wall ═══ */
+            gsap.from('.s4-tag', {
+                x: -40, opacity: 0,
+                scrollTrigger: { trigger: '#S4', start: 'top 75%', end: 'top 45%', scrub: 1 }
+            });
+            gsap.from('.s4-h', {
+                y: 30, opacity: 0,
+                scrollTrigger: { trigger: '#S4', start: 'top 70%', end: 'top 40%', scrub: 1.2 }
+            });
+            gsap.from('.ticker-row', {
+                y: 40, opacity: 0,
+                stagger: 0.15,
+                scrollTrigger: { trigger: '.ticker-wall', start: 'top 85%', end: 'top 40%', scrub: 1.2 }
+            });
+
+            /* ═══ 6. S5 CONTACT — heading flips up, terminal rotates in ═══ */
+            gsap.from('.s5-label', {
+                x: -50, opacity: 0,
+                scrollTrigger: { trigger: '#S5', start: 'top 75%', end: 'top 40%', scrub: 1 }
+            });
+            gsap.from('.s5-h', {
+                rotateX: 18, y: 40, opacity: 0,
+                scrollTrigger: { trigger: '#S5', start: 'top 70%', end: 'top 25%', scrub: 1.2 }
+            });
+            gsap.from('.s5-p', {
+                y: 30, opacity: 0,
+                scrollTrigger: { trigger: '#S5', start: 'top 60%', end: 'top 30%', scrub: 1 }
+            });
+            gsap.from('.term', {
+                rotateY: -20, rotateX: 8, x: 80, opacity: 0,
+                scrollTrigger: { trigger: '.term', start: 'top 85%', end: 'top 35%', scrub: 1.5 }
+            });
+            gsap.from('.links', {
+                y: 40, opacity: 0,
+                scrollTrigger: { trigger: '.links', start: 'top 85%', end: 'top 50%', scrub: 1 }
+            });
+
+            /* ═══ 7. WATERMARK horizontal slide ═══ */
+            gsap.fromTo('.swm', { x: 150 }, {
+                x: -50,
+                scrollTrigger: { trigger: '#S2', start: 'top bottom', end: 'bottom top', scrub: 2 }
+            });
+
+            /* ═══ 8. PHILOSOPHY — pinned text scaling ═══ */
+            const philoTL = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '#S_PHILO',
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: 1.5,
+                    pin: '.philo-pin'
+                }
+            });
+            philoTL
+                .from('.philo-tag', { opacity: 0, y: 30, duration: .3 })
+                .from('.pw1', { scale: 3, opacity: 0, y: 50, duration: .5 }, '+=.1')
+                .from('.pw2', { scale: 5, opacity: 0, rotateX: -30, duration: .6 }, '+=.1')
+                .from('.pw3', { scale: 3, opacity: 0, y: -50, duration: .5 }, '+=.1')
+                .from('.philo-sub', { y: 40, opacity: 0, duration: .4 }, '+=.2')
+                .from('.philo-line', { scaleX: 0, opacity: 0, duration: .3 }, '-=.2')
+                .to('.philo-bg-text', { scale: 1.3, opacity: 0.04, rotation: -5, duration: 2 }, 0);
+
+            /* ═══ 9. EDUCATION — card slides in ═══ */
+            gsap.from('.edu-tag', {
+                x: -40, opacity: 0,
+                scrollTrigger: { trigger: '#S_EDU', start: 'top 75%', end: 'top 45%', scrub: 1 }
+            });
+            gsap.from('.edu-title', {
+                rotateY: 20, x: -60, opacity: 0,
+                scrollTrigger: { trigger: '#S_EDU', start: 'top 70%', end: 'top 30%', scrub: 1.2 }
+            });
+            gsap.from('.edu-card', {
+                rotateY: -15, x: 80, opacity: 0, scale: 0.9,
+                scrollTrigger: { trigger: '.edu-card', start: 'top 80%', end: 'top 35%', scrub: 1.5 }
+            });
+            // Animate CGPA counter
+            document.querySelectorAll('.edu-cgpa[data-count]').forEach(el => {
+                const target = parseFloat(el.dataset.count);
+                const suffix = el.dataset.suffix || '';
+                const isFloat = target % 1 !== 0;
+                ScrollTrigger.create({
+                    trigger: el, start: 'top 80%',
+                    onEnter: () => {
+                        gsap.to({ v: 0 }, {
+                            v: target, duration: 1.8, ease: 'power3.out',
+                            onUpdate: function() { el.textContent = (isFloat ? this.targets()[0].v.toFixed(1) : Math.floor(this.targets()[0].v)) + suffix; }
+                        });
+                    }, once: true
+                });
+            });
+
+            /* ═══ 10. EXPERIENCE — cards stagger from right ═══ */
+            gsap.from('.exp-tag', {
+                x: -40, opacity: 0,
+                scrollTrigger: { trigger: '#S_EXP', start: 'top 75%', end: 'top 45%', scrub: 1 }
+            });
+            gsap.from('.exp-title', {
+                rotateX: -20, y: 40, opacity: 0,
+                scrollTrigger: { trigger: '#S_EXP', start: 'top 70%', end: 'top 30%', scrub: 1.2 }
+            });
+            gsap.from('.exp-card', {
+                x: 100, opacity: 0, rotateY: -10,
+                stagger: 0.2,
+                scrollTrigger: { trigger: '.exp-card', start: 'top 85%', end: 'top 30%', scrub: 1.5 }
+            });
+
+            /* ═══ 11. MY STORY — text highlight reveal ═══ */
+            gsap.from('.story-tag', {
+                x: -40, opacity: 0,
+                scrollTrigger: { trigger: '#S_STORY', start: 'top 75%', end: 'top 45%', scrub: 1 }
+            });
+            gsap.from('.story-title', {
+                scale: 0.7, opacity: 0, y: 30,
+                scrollTrigger: { trigger: '#S_STORY', start: 'top 70%', end: 'top 35%', scrub: 1.2 }
+            });
+            // Each line fades from dim to bright as you scroll past it
+            gsap.utils.toArray('.story-line').forEach((line, i) => {
+                gsap.to(line, {
+                    color: 'rgba(26, 26, 46, .85)',
+                    scrollTrigger: {
+                        trigger: line,
+                        start: 'top 80%',
+                        end: 'top 40%',
+                        scrub: 1
+                    }
+                });
+            });
+            gsap.from('.story-divider', {
+                scaleX: 0, opacity: 0,
+                scrollTrigger: { trigger: '.story-divider', start: 'top 80%', end: 'top 55%', scrub: 1 }
+            });
+            gsap.from('.story-fact', {
+                y: 50, opacity: 0, scale: 0.85,
+                stagger: 0.12,
+                scrollTrigger: { trigger: '.story-aside', start: 'top 85%', end: 'top 40%', scrub: 1.5 }
+            });
+            gsap.fromTo('.story-bg-num', { x: 100 }, {
+                x: -80,
+                scrollTrigger: { trigger: '#S_STORY', start: 'top bottom', end: 'bottom top', scrub: 2 }
+            });
+
+            /* ═══ 12. NAV COLOR MORPH + PROGRESS BAR + SECTION LABEL + BG + CURSOR ═══ */
+            const themes = [
+                { el: document.getElementById('S1'), dark: false, bg: '#f4efe6', cursor: '#2a7c7c' },
+                { el: document.getElementById('S2'), dark: true, bg: '#0d1520', cursor: '#c9a96e' },
+                { el: document.getElementById('S_PHILO'), dark: true, bg: '#0a0f1a', cursor: '#c9a96e' },
+                { el: document.querySelector('.marq-wrap'), dark: true, bg: '#1a1200', cursor: '#c9a96e' },
+                { el: document.getElementById('S3'), dark: true, bg: '#1a1200', cursor: '#c9a96e' },
+                { el: document.getElementById('S4'), dark: false, bg: '#e8dfd0', cursor: '#2a7c7c' },
+                { el: document.getElementById('S_EDU'), dark: false, bg: '#f4efe6', cursor: '#2a7c7c' },
+                { el: document.getElementById('S_EXP'), dark: true, bg: '#0d1520', cursor: '#c9a96e' },
+                { el: document.getElementById('S_STORY'), dark: false, bg: '#faf8f5', cursor: '#2a7c7c' },
+                { el: document.getElementById('S5'), dark: true, bg: '#1a1a2e', cursor: '#c9a96e' },
+            ].filter(t => t.el);
+
+            ScrollTrigger.create({
+                trigger: 'body',
+                start: 'top top',
+                end: 'bottom bottom',
+                onUpdate: (self) => {
+                    const sy = window.scrollY, vh = window.innerHeight;
+                    // Progress bar
+                    const spbar = document.getElementById('SPBAR');
+                    if (spbar) spbar.style.width = (self.progress * 100) + '%';
+
+                    // Nav, body bg, cursor
+                    let dark = false, bg = '#f4efe6', cursor = '#2a7c7c';
+                    for (let i = themes.length - 1; i >= 0; i--) {
+                        if (themes[i].el.getBoundingClientRect().top <= vh * 0.12) {
+                            dark = themes[i].dark; bg = themes[i].bg; cursor = themes[i].cursor; break;
+                        }
+                    }
+                    nav.classList.toggle('bg', sy > 60 && !dark);
+                    nav.classList.toggle('nav-dark', dark && sy > 60);
+                    document.body.style.backgroundColor = bg;
+
+
+                    // Section label
+                    const slabel = document.getElementById('SLABEL');
+                    if (slabel) {
+                        let label = '';
+                        document.querySelectorAll('[data-label]').forEach(s => {
+                            const r = s.getBoundingClientRect();
+                            if (r.top <= vh * 0.5 && r.bottom > vh * 0.3) label = s.dataset.label;
+                        });
+                        if (label && sy > 100) { slabel.textContent = label; slabel.classList.add('show'); }
+                        else slabel.classList.remove('show');
+                    }
+                }
+            });
+        })();
+
+
+
+        /* ─── STAGGERED FLOAT-CARD ENTRANCE ─── */
+        const fcObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    [...e.target.querySelectorAll('.fc')].forEach((fc, i) => {
+                        setTimeout(() => fc.classList.add('on'), i * 120);
+                    });
+                    fcObs.unobserve(e.target);
+                }
+            });
+        }, { threshold: .15 });
+        document.querySelectorAll('.s2-r').forEach(el => fcObs.observe(el));
+
+        /* ─── ANIMATED NUMBER COUNTERS ─── */
+        const numObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const el = e.target;
+                    const target = parseInt(el.dataset.count);
+                    const suffix = el.dataset.suffix || '';
+                    const duration = 1600;
+                    const start = performance.now();
+                    function animate(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        el.textContent = Math.floor(target * eased) + suffix;
+                        if (progress < 1) requestAnimationFrame(animate);
+                    }
+                    requestAnimationFrame(animate);
+                    numObs.unobserve(el);
+                }
+            });
+        }, { threshold: .5 });
+        document.querySelectorAll('.fc-num[data-count]').forEach(el => numObs.observe(el));
+
+        /* ─── BACK TO TOP BUTTON ─── */
+        const btt = document.getElementById('BTT');
+        window.addEventListener('scroll', () => {
+            if (btt) btt.classList.toggle('show', window.scrollY > window.innerHeight * 1.2);
+        }, { passive: true });
+
+        /* ─── SMOOTH SCROLL FOR ANCHOR LINKS ─── */
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
