@@ -128,9 +128,41 @@
         }
 
         @keyframes fup {
-            to {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+                filter: blur(10px);
+            }
+            100% {
                 opacity: 1;
-                transform: translateY(0)
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes cyberReveal {
+            0% {
+                opacity: 0;
+                clip-path: inset(0 50% 0 50%);
+                transform: translateY(40px) scaleY(2) scaleX(0.2);
+                filter: blur(20px);
+                color: var(--gold);
+            }
+            40% {
+                opacity: 1;
+                clip-path: inset(0 0 0 0);
+                transform: translateY(-10px) scaleY(0.8) scaleX(1.1);
+                filter: blur(2px);
+                color: var(--c3);
+            }
+            70% {
+                transform: translateY(5px) scaleY(1.05) scaleX(0.98);
+            }
+            100% {
+                opacity: 1;
+                clip-path: inset(0 0 0 0);
+                transform: translateY(0) scaleY(1) scaleX(1);
+                filter: blur(0);
             }
         }
 
@@ -232,8 +264,12 @@
 
         #BGC {
             position: absolute;
-            inset: 0;
-            z-index: 1
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
         .h-blob {
@@ -304,42 +340,43 @@
         }
 
         .h-name .row {
-            overflow: hidden;
             display: block;
             padding: 0 .15em .2em .2em;
+            perspective: 1000px;
         }
 
         .h-name .row span {
             display: block;
-            transform: translateY(110%);
-            animation: lup 1s cubic-bezier(.16, 1, .3, 1) forwards
+            opacity: 0;
+            transform-origin: center center;
+            animation: cyberReveal 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .h-name .row:nth-child(1) span {
-            animation-delay: 2.8s
+            animation-delay: 2.8s;
+            background: linear-gradient(135deg, var(--c3), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .h-name .row:nth-child(2) span {
-            animation-delay: 2.96s
+            animation-delay: 2.96s;
+            font-size: 0.85em;
         }
 
         .h-name .row:nth-child(3) span {
             animation-delay: 3.12s;
+            font-size: 0.85em;
+        }
+
+        .h-name .row:nth-child(4) span {
+            animation-delay: 3.28s;
             font-family: var(--fs);
             font-style: italic;
             color: var(--c3);
-            font-size: .65em
-        }
-
-        .h-subtext {
-            font-family: var(--fs);
-            font-size: clamp(1.1rem, 1.8vw, 1.4rem);
-            color: rgba(26, 26, 46, .7);
-            line-height: 1.5;
-            max-width: 600px;
-            margin-bottom: 2.5rem;
-            opacity: 0;
-            animation: fup .8s ease 3.3s forwards;
+            font-size: .5em;
+            margin-top: 0.25em;
         }
 
         .h-actions {
@@ -359,7 +396,7 @@
             z-index: 2;
             display: flex;
             align-items: flex-end;
-            justify-content: space-between;
+            justify-content: flex-end;
             opacity: 0;
             animation: fup .8s ease 3.4s forwards;
             pointer-events: auto;
@@ -588,13 +625,35 @@
             max-width: 1300px;
             margin: 0 auto;
             padding: 12rem 6vw 10rem;
-            display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            gap: 6rem;
-            align-items: center
+            display: flex;
+            flex-direction: column;
+            gap: 5rem;
         }
 
-        .s2-l {}
+        .s2-top {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .s2-bio {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem 4rem;
+        }
+
+        .s2-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+        }
+
+        @media (max-width: 900px) {
+            .s2-top { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+            .s2-bio { grid-template-columns: 1fr; }
+            .s2-cards { grid-template-columns: 1fr; }
+        }
 
         /* Photo frame */
         .s2-photo-wrap {
@@ -723,8 +782,6 @@
             font-size: 1.05rem;
             color: rgba(244, 239, 230, .55);
             line-height: 1.9;
-            max-width: 400px;
-            margin-top: 2rem
         }
 
         .s2-p strong {
@@ -1050,7 +1107,7 @@
             border-radius: 3px
         }
 
-        /* ═══════════ S4 STACK — FULL 3D ORBIT ═══════════ */
+        /* ═══════════ S4 BENTO GRID ═══════════ */
         #S4 {
             min-height: 100vh;
             position: relative;
@@ -1058,18 +1115,18 @@
             background: radial-gradient(ellipse at 50% 40%, #f4efe6 0%, #e0d5c5 60%, #c8bfb0 100%);
             display: flex;
             align-items: center;
-            justify-content: center
+            justify-content: center;
         }
 
         .s4-wrap {
-            max-width: 1100px;
+            max-width: 1200px;
             width: 100%;
             margin: 0 auto;
-            padding: 8rem 6vw
+            padding: 8rem 4vw;
         }
 
         .s4-hd {
-            margin-bottom: 4rem
+            margin-bottom: 4rem;
         }
 
         .s4-l .s4-tag {
@@ -1078,7 +1135,7 @@
             color: var(--c3);
             letter-spacing: .25em;
             text-transform: uppercase;
-            margin-bottom: 1rem
+            margin-bottom: 1rem;
         }
 
         .s4-h {
@@ -1086,7 +1143,7 @@
             font-size: clamp(3rem, 6vw, 5.5rem);
             line-height: .92;
             letter-spacing: .04em;
-            color: var(--c2)
+            color: var(--c2);
         }
 
         .s4-h em {
@@ -1094,123 +1151,115 @@
             font-style: italic;
             color: var(--c3);
             display: inline;
-            font-size: .75em
+            font-size: .75em;
         }
 
-        /* Ticker wall */
-        .ticker-wall {
+        .skills-tiered {
             display: flex;
             flex-direction: column;
-            gap: 1rem
+            gap: 0;
+            margin-top: 3rem;
         }
 
-        .ticker-row {
+        .tier-split-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+        }
+
+        .tier-split-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .sk-tier {
             display: flex;
-            overflow: hidden;
-            position: relative
+            flex-direction: column;
+            gap: 2rem;
+            padding: 3.5rem 0;
         }
 
-        .ticker-row::before,
-        .ticker-row::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 80px;
-            z-index: 2;
-            pointer-events: none
+        /* Alternating tier backgrounds */
+        .skills-tiered > .sk-tier:nth-child(odd),
+        .skills-tiered > .tier-split-2:nth-child(odd),
+        .skills-tiered > .tier-split-3:nth-child(odd) {
+            background: transparent;
+        }
+        .skills-tiered > .sk-tier:nth-child(even),
+        .skills-tiered > .tier-split-2:nth-child(even),
+        .skills-tiered > .tier-split-3:nth-child(even) {
+            background: rgba(26, 26, 46, 0.025);
+            border-radius: 16px;
+            padding: 3.5rem 2.5rem;
         }
 
-        .ticker-row::before {
-            left: 0;
-            background: linear-gradient(90deg, #e8dfd0 0%, transparent 100%)
+        /* Horizontal dividers between tiers */
+        .skills-tiered > *:not(:last-child) {
+            border-bottom: 1px solid rgba(26, 26, 46, 0.08);
         }
 
-        .ticker-row::after {
-            right: 0;
-            background: linear-gradient(270deg, #e8dfd0 0%, transparent 100%)
-        }
-
-        .ticker-track {
-            display: flex;
-            gap: .8rem;
-            animation: tickerScroll 30s linear infinite;
-            will-change: transform
-        }
-
-        .ticker-row.rev .ticker-track {
-            animation-name: tickerScrollRev;
-            animation-duration: 35s
-        }
-
-        .ticker-row:nth-child(3) .ticker-track {
-            animation-duration: 25s
-        }
-
-        .ticker-wall:hover .ticker-track {
-            animation-play-state: paused
-        }
-
-        @keyframes tickerScroll {
-            0% {
-                transform: translateX(0)
-            }
-
-            100% {
-                transform: translateX(-50%)
-            }
-        }
-
-        @keyframes tickerScrollRev {
-            0% {
-                transform: translateX(-50%)
-            }
-
-            100% {
-                transform: translateX(0)
-            }
-        }
-
-        .tk {
-            display: flex;
-            align-items: center;
-            gap: .65rem;
-            flex-shrink: 0;
-            padding: .7rem 1.2rem;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, .65);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(42, 124, 124, .1);
-            transition: all .35s
-        }
-
-        .tk:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 12px 35px rgba(42, 124, 124, .12);
-            border-color: rgba(42, 124, 124, .3)
-        }
-
-        .tk-icon {
-            font-size: 1.5rem;
-            line-height: 1
-        }
-
-        .tk-name {
-            font-family: var(--sy);
-            font-size: .78rem;
-            color: var(--c2);
-            white-space: nowrap
-        }
-
-        .tk-cat {
+        .tier-label {
             font-family: var(--fm);
-            font-size: .5rem;
-            color: rgba(26, 26, 46, .35);
-            letter-spacing: .1em;
+            font-size: 0.8rem;
+            color: var(--c3);
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            white-space: nowrap
+            padding-left: 1rem;
+            border-left: 3px solid var(--c3);
+            margin-bottom: 0.5rem;
         }
+
+        .tier-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.8rem;
+            align-items: center;
+        }
+
+        .tier-words span {
+            font-family: var(--fd);
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: 0.02em;
+            transition: transform 0.2s ease, color 0.2s ease;
+            cursor: default;
+        }
+
+        /* Per-color hover shifts */
+        .tier-words span.c-navy:hover {
+            color: var(--c3);
+            transform: scale(1.04) translateY(-2px);
+        }
+        .tier-words span.c-teal:hover {
+            color: var(--gold);
+            transform: scale(1.04) translateY(-2px);
+        }
+        .tier-words span.c-gold:hover {
+            color: var(--c2);
+            transform: scale(1.04) translateY(-2px);
+        }
+
+        /* Sizing Classes — pushed contrast further */
+        .w-huge { font-size: clamp(4rem, 6vw, 6.5rem); }
+        .w-xlarge { font-size: clamp(3rem, 4.5vw, 5rem); }
+        .w-large { font-size: clamp(2.2rem, 3vw, 3.5rem); }
+        .w-med { font-size: clamp(1.6rem, 2vw, 2.5rem); }
+
+        /* Color Classes */
+        .c-navy { color: var(--c2); }
+        .c-teal { color: var(--c3); }
+        .c-gold { color: var(--gold); }
+
+        @media (max-width: 900px) {
+            .tier-split-2, .tier-split-3 { grid-template-columns: 1fr; gap: 4rem; }
+            .skills-tiered > .sk-tier:nth-child(even),
+            .skills-tiered > .tier-split-2:nth-child(even),
+            .skills-tiered > .tier-split-3:nth-child(even) {
+                padding: 3rem 1.5rem;
+            }
+        }
+
 
         /* ═══════════ S5 CONTACT — SPLIT ═══════════ */
         #S5 {
@@ -2634,20 +2683,14 @@
         <div class="h-blob" style="width:280px;height:280px;background:rgba(212,150,122,.12);
     top:30%;left:10%;animation-duration:15s;animation-delay:-7s"></div>
 
-        <div class="h-status">
-            <span class="h-status-dot"></span>
-            Open to Opportunities
-        </div>
-
         <div class="hero-grid">
             <div class="h-wrap">
-                <div class="h-tag">3rd Year Artificial Intelligence &amp; Data Science Student</div>
+                <div class="h-tag">3rd Year AI &amp; Data Science Student</div>
                 <h1 class="h-name">
                     <span class="row"><span>I'm Vedant.</span></span>
-                    <span class="row"><span>I Build Intelligence.</span></span>
-                    <span class="row"><span><em
-                                style="font-family:'Instrument Serif',serif;font-style:italic;color:var(--c3)">I turn
-                                ideas into scalable products.</em></span></span>
+                    <span class="row"><span>I Build</span></span>
+                    <span class="row"><span>Intelligence.</span></span>
+                    <span class="row"><span>I turn ideas into scalable products.</span></span>
                 </h1>
                 <div class="h-actions">
                     <a href="#S3" class="h-cta">See My Work →</a>
@@ -2656,7 +2699,6 @@
             </div>
         </div>
         <div class="h-side">
-            <p class="h-desc">ML pipelines, data-driven apps, and systems that think — built from first principles.</p>
             <div class="h-contact-info">
                 <a href="mailto:vedantkolhapure111@gmail.com" class="h-email">vedantkolhapure111@gmail.com</a>
                 <div class="h-socials">
@@ -2680,7 +2722,8 @@
         <div class="s2-diag"></div>
         <div class="swm">02</div>
         <div class="s2-inner">
-            <div class="s2-l">
+            <!-- Row 1: Photo + Heading -->
+            <div class="s2-top">
                 <div class="s2-photo-wrap rx">
                     <div class="s2-photo-accent"></div>
                     <div class="s2-photo">
@@ -2690,15 +2733,14 @@
                     <div class="s2-photo-dot d1"></div>
                     <div class="s2-photo-dot d2"></div>
                 </div>
-                <div class="s2-tag rx">System Profile</div>
-                <h2 class="s2-h rx d1">The<br>Human<br><em>Behind It</em></h2>
-                <p class="s2-p rx d2">
-                    <strong>3rd Year AI &amp; Data Science student</strong> (CGPA: 8.5).
-                    My primary focus and goal is securing a role in <strong>AI/ML</strong>,
-                    but I also love backend development using Python, FastAPI, Flask, and Django.
-                </p>
+                <div>
+                    <div class="s2-tag rx">System Profile</div>
+                    <h2 class="s2-h rx d1">The<br>Human<br><em>Behind It</em></h2>
+                </div>
             </div>
-            <div class="s2-r">
+
+            <!-- Row 3: Feature Cards -->
+            <div class="s2-cards">
                 <div class="fc rx d1">
                     <div class="fc-icon">🧠</div>
                     <div class="fc-t">Machine Learning</div>
@@ -2727,35 +2769,33 @@
             <div class="story-tag">Beyond The Code</div>
             <h2 class="story-title">My <em>Story</em></h2>
 
-            <p class="story-line sl">I’m a 3rd year <span class="hl">Artificial Intelligence &amp; Data Science</span>
-                student who fell in love with data before I could spell “regression.”</p>
-            <p class="story-line sl">What started as curiosity about <span class="hl">how machines learn</span> quickly
-                became an obsession with building intelligent systems.</p>
-            <p class="story-line sl">I don’t just train models — I <span class="hl">engineer solutions</span>. From
-                AI/ML pipelines to robust backends with FastAPI and Django, I enjoy mastering the stack.</p>
+            <p class="story-line sl">I'm a developer who genuinely enjoys the craft — not just writing code, but thinking through
+                <span class="hl">why something should be built a certain way</span> and making sure it holds up when real people use it.
+                My work sits at the intersection of <span class="hl">AI and backend engineering</span>, and I find that combination
+                compelling: intelligent systems are only as good as the infrastructure they run on.</p>
+
+            <p class="story-line sl">AI is where my curiosity runs deepest — understanding how <span class="hl">language models</span> work,
+                making them reliable in production, and building systems that go beyond demos. At the same time, I take
+                backend development seriously as a discipline in its own right: <span class="hl">clean API design</span>,
+                thoughtful data flow, and code that other people can actually work with.</p>
 
             <div class="story-divider"></div>
 
-            <p class="story-line sl">When I’m not debugging pipelines, you’ll find me exploring new <span
-                    class="hl">research papers</span>, experimenting with side projects, or obsessing over clean UI.</p>
-            <p class="story-line sl">I believe the best engineers are the ones who <span class="hl">never stop being
-                    students</span> — and I’m just getting started.</p>
-            <p class="story-line sl">Currently seeking <span class="hl">internship opportunities</span> where I can
-                contribute, learn, and build something meaningful.</p>
+            <p class="story-line sl">Outside of tech — I'm a big reader (mostly non-fiction, though a good thriller never hurts)
+                and someone who takes <span class="hl">fitness</span> pretty seriously. Hitting the gym is less of a routine and
+                more of a reset button for me. I think staying sharp physically and mentally makes for a
+                <span class="hl">better engineer</span>, and honestly, a better human.</p>
 
             <div class="story-aside">
                 <div class="story-fact">
-                    <div class="sf-emoji">☕</div>
                     <div class="sf-label">Fuel</div>
                     <div class="sf-val">Coffee & curiosity</div>
                 </div>
                 <div class="story-fact">
-                    <div class="sf-emoji">🎯</div>
                     <div class="sf-label">Focus</div>
                     <div class="sf-val">Artificial Intelligence & Data Science</div>
                 </div>
                 <div class="story-fact">
-                    <div class="sf-emoji">💡</div>
                     <div class="sf-label">Motto</div>
                     <div class="sf-val">Ship it, then polish it</div>
                 </div>
@@ -2891,232 +2931,70 @@
                 <div class="s4-tag rx">The Toolkit</div>
                 <h2 class="s4-h rx d1">Core <em>Skills</em></h2>
             </div>
-            <div class="ticker-wall">
-                <div class="ticker-row">
-                    <div class="ticker-track">
-                        <div class="tk"><span class="tk-icon">🐍</span>
-                            <div>
-                                <div class="tk-name">Python</div>
-                                <div class="tk-cat">Language</div>
-                            </div>
+            <div class="skills-tiered">
+                <!-- Top Tier: Full Width -->
+                <div class="sk-tier top-tier rx d1">
+                    <h3 class="tier-label">AI/ML & NLP</h3>
+                    <div class="tier-words">
+                        <span class="w-huge c-navy">LangChain</span>
+                        <span class="w-xlarge c-teal">Scikit-Learn</span>
+                        <span class="w-xlarge c-navy">TensorFlow</span>
+                        <span class="w-xlarge c-gold">PyTorch</span>
+                        <span class="w-large c-gold">RAG</span>
+                        <span class="w-huge c-navy">LLMs</span>
+                        <span class="w-xlarge c-teal">HuggingFace</span>
+                        <span class="w-large c-navy">Prompt Eng.</span>
+                        <span class="w-large c-gold">FAISS</span>
+                        <span class="w-large c-teal">Fine-Tuning</span>
+                    </div>
+                </div>
+
+                <!-- Middle Tier: 2 Columns -->
+                <div class="tier-split-2">
+                    <div class="sk-tier mid-tier rx d2">
+                        <h3 class="tier-label">Backend Frameworks</h3>
+                        <div class="tier-words">
+                            <span class="w-xlarge c-navy">FastAPI</span>
+                            <span class="w-xlarge c-teal">Django</span>
+                            <span class="w-large c-gold">Flask</span>
+                            <span class="w-large c-navy">Streamlit</span>
                         </div>
-                        <div class="tk"><span class="tk-icon">🧠</span>
-                            <div>
-                                <div class="tk-name">Scikit-learn</div>
-                                <div class="tk-cat">ML</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🌲</span>
-                            <div>
-                                <div class="tk-name">XGBoost</div>
-                                <div class="tk-cat">ML</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">📊</span>
-                            <div>
-                                <div class="tk-name">Pandas</div>
-                                <div class="tk-cat">Data</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🔢</span>
-                            <div>
-                                <div class="tk-name">NumPy</div>
-                                <div class="tk-cat">Data</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">📈</span>
-                            <div>
-                                <div class="tk-name">Matplotlib</div>
-                                <div class="tk-cat">Viz</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🐍</span>
-                            <div>
-                                <div class="tk-name">Python</div>
-                                <div class="tk-cat">Language</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🧠</span>
-                            <div>
-                                <div class="tk-name">Scikit-learn</div>
-                                <div class="tk-cat">ML</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🌲</span>
-                            <div>
-                                <div class="tk-name">XGBoost</div>
-                                <div class="tk-cat">ML</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">📊</span>
-                            <div>
-                                <div class="tk-name">Pandas</div>
-                                <div class="tk-cat">Data</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🔢</span>
-                            <div>
-                                <div class="tk-name">NumPy</div>
-                                <div class="tk-cat">Data</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">📈</span>
-                            <div>
-                                <div class="tk-name">Matplotlib</div>
-                                <div class="tk-cat">Viz</div>
-                            </div>
+                    </div>
+                    <div class="sk-tier mid-tier rx d3">
+                        <h3 class="tier-label">Programming</h3>
+                        <div class="tier-words">
+                            <span class="w-huge c-navy">Python</span>
+                            <span class="w-xlarge c-teal">C++</span>
+                            <span class="w-xlarge c-gold">SQL</span>
+                            <span class="w-large c-navy">PHP</span>
                         </div>
                     </div>
                 </div>
-                <div class="ticker-row rev">
-                    <div class="ticker-track">
-                        <div class="tk"><span class="tk-icon">🌐</span>
-                            <div>
-                                <div class="tk-name">JavaScript</div>
-                                <div class="tk-cat">Web</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🎨</span>
-                            <div>
-                                <div class="tk-name">HTML/CSS</div>
-                                <div class="tk-cat">Web</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🌶️</span>
-                            <div>
-                                <div class="tk-name">Flask</div>
-                                <div class="tk-cat">Backend</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">📄</span>
-                            <div>
-                                <div class="tk-name">Jinja2</div>
-                                <div class="tk-cat">Template</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🔗</span>
-                            <div>
-                                <div class="tk-name">REST API</div>
-                                <div class="tk-cat">Backend</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🗄️</span>
-                            <div>
-                                <div class="tk-name">SQL</div>
-                                <div class="tk-cat">Database</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🌐</span>
-                            <div>
-                                <div class="tk-name">JavaScript</div>
-                                <div class="tk-cat">Web</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🎨</span>
-                            <div>
-                                <div class="tk-name">HTML/CSS</div>
-                                <div class="tk-cat">Web</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🌶️</span>
-                            <div>
-                                <div class="tk-name">Flask</div>
-                                <div class="tk-cat">Backend</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">📄</span>
-                            <div>
-                                <div class="tk-name">Jinja2</div>
-                                <div class="tk-cat">Template</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🔗</span>
-                            <div>
-                                <div class="tk-name">REST API</div>
-                                <div class="tk-cat">Backend</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🗄️</span>
-                            <div>
-                                <div class="tk-name">SQL</div>
-                                <div class="tk-cat">Database</div>
-                            </div>
+
+                <!-- Bottom Tier: 3 Columns -->
+                <div class="tier-split-3">
+                    <div class="sk-tier bot-tier rx d1">
+                        <h3 class="tier-label">Web Dev</h3>
+                        <div class="tier-words">
+                            <span class="w-large c-navy">JavaScript</span>
+                            <span class="w-med c-teal">HTML</span>
+                            <span class="w-med c-gold">CSS</span>
                         </div>
                     </div>
-                </div>
-                <div class="ticker-row">
-                    <div class="ticker-track">
-                        <div class="tk"><span class="tk-icon">⚡</span>
-                            <div>
-                                <div class="tk-name">C++</div>
-                                <div class="tk-cat">Language</div>
-                            </div>
+                    <div class="sk-tier bot-tier rx d2">
+                        <h3 class="tier-label">Data Analysis</h3>
+                        <div class="tier-words">
+                            <span class="w-xlarge c-navy">Pandas</span>
+                            <span class="w-xlarge c-teal">NumPy</span>
+                            <span class="w-large c-gold">Matplotlib</span>
+                            <span class="w-med c-navy">Seaborn</span>
                         </div>
-                        <div class="tk"><span class="tk-icon">💬</span>
-                            <div>
-                                <div class="tk-name">NLP</div>
-                                <div class="tk-cat">AI</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🔀</span>
-                            <div>
-                                <div class="tk-name">Git</div>
-                                <div class="tk-cat">Tools</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">📉</span>
-                            <div>
-                                <div class="tk-name">EDA</div>
-                                <div class="tk-cat">Data</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🎯</span>
-                            <div>
-                                <div class="tk-name">Feature Eng.</div>
-                                <div class="tk-cat">ML</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🌳</span>
-                            <div>
-                                <div class="tk-name">Random Forest</div>
-                                <div class="tk-cat">ML</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">⚡</span>
-                            <div>
-                                <div class="tk-name">C++</div>
-                                <div class="tk-cat">Language</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">💬</span>
-                            <div>
-                                <div class="tk-name">NLP</div>
-                                <div class="tk-cat">AI</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🔀</span>
-                            <div>
-                                <div class="tk-name">Git</div>
-                                <div class="tk-cat">Tools</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">📉</span>
-                            <div>
-                                <div class="tk-name">EDA</div>
-                                <div class="tk-cat">Data</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🎯</span>
-                            <div>
-                                <div class="tk-name">Feature Eng.</div>
-                                <div class="tk-cat">ML</div>
-                            </div>
-                        </div>
-                        <div class="tk"><span class="tk-icon">🌳</span>
-                            <div>
-                                <div class="tk-name">Random Forest</div>
-                                <div class="tk-cat">ML</div>
-                            </div>
+                    </div>
+                    <div class="sk-tier bot-tier rx d3">
+                        <h3 class="tier-label">Tools</h3>
+                        <div class="tier-words">
+                            <span class="w-large c-navy">Git / GitHub</span>
+                            <span class="w-large c-teal">Power BI</span>
                         </div>
                     </div>
                 </div>
@@ -3134,7 +3012,8 @@
             <div class="edu-card">
                 <div class="edu-icon">🎓</div>
                 <div class="edu-deg">B.E. Artificial Intelligence &amp; Data Science</div>
-                <div class="edu-college">3rd Year Student</div>
+                <div class="edu-college">Dr. D. Y. Patil Institute of Engineering, Management & Research, Akurdi</div>
+                <div class="edu-college" style="opacity:.55;font-size:.85rem;margin-top:.25rem">3rd Year Student</div>
                 <div class="edu-meta">
                     <div class="edu-pill">2023 — Present</div>
                     <div class="edu-pill">Pune, India</div>
@@ -3318,7 +3197,7 @@
             cam.position.set(0, 0, 34);
 
             /* Background soft gradient mesh via plane */
-            const pgeo = new THREE.PlaneGeometry(200, 100);
+            const pgeo = new THREE.PlaneGeometry(200, 200);
             const pmat = new THREE.ShaderMaterial({
                 uniforms: { time: { value: 0 } },
                 vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
@@ -3338,28 +3217,28 @@
             sc.add(plane);
 
             /* Large wireframe crystal */
-            const ig = new THREE.IcosahedronGeometry(7, 1);
+            const ig = new THREE.IcosahedronGeometry(8, 1);
             const im = new THREE.MeshBasicMaterial({ color: 0x2a7c7c, wireframe: true, transparent: true, opacity: .15 });
             const ico = new THREE.Mesh(ig, im);
-            ico.position.set(18, 0, -6); sc.add(ico);
+            ico.position.set(20, 2, -10); sc.add(ico);
 
             /* Octahedron */
-            const og = new THREE.OctahedronGeometry(4.5);
+            const og = new THREE.OctahedronGeometry(5.5);
             const om = new THREE.MeshBasicMaterial({ color: 0xc9a96e, wireframe: true, transparent: true, opacity: .2 });
             const oct = new THREE.Mesh(og, om);
-            oct.position.set(6, -4, -14); sc.add(oct);
+            oct.position.set(10, -6, -18); sc.add(oct);
 
             /* Small tetra */
-            const tg = new THREE.TetrahedronGeometry(2.5);
+            const tg = new THREE.TetrahedronGeometry(3.5);
             const tm = new THREE.MeshBasicMaterial({ color: 0x7c6aad, wireframe: true, transparent: true, opacity: .25 });
             const tet = new THREE.Mesh(tg, tm);
-            tet.position.set(26, -3, -4); sc.add(tet);
+            tet.position.set(26, -2, -8); sc.add(tet);
 
             /* Torus */
-            const trg = new THREE.TorusGeometry(3.5, 0.15, 8, 40);
+            const trg = new THREE.TorusGeometry(4, 0.18, 8, 40);
             const trm = new THREE.MeshBasicMaterial({ color: 0xd4967a, transparent: true, opacity: .18 });
             const tor = new THREE.Mesh(trg, trm);
-            tor.position.set(10, 8, -16); tor.rotation.x = 1.2; sc.add(tor);
+            tor.position.set(14, 10, -20); tor.rotation.x = 1.2; sc.add(tor);
 
             /* Particles with warm palette */
             const cnt = 1400, pos = new Float32Array(cnt * 3), col = new Float32Array(cnt * 3);
@@ -3380,18 +3259,18 @@
                 const g = new THREE.SphereGeometry(.14 + Math.random() * .16, 6, 6);
                 const m = new THREE.MeshBasicMaterial({ color: i % 3 === 0 ? 0x2a7c7c : i % 3 === 1 ? 0xc9a96e : 0x7c6aad, transparent: true, opacity: .75 });
                 const mesh = new THREE.Mesh(g, m);
-                const p = { x: Math.random() * 34 + 2, y: (Math.random() - .5) * 24, z: (Math.random() - .5) * 18 };
+                const p = { x: Math.random() * 18 + 12, y: (Math.random() - .5) * 24, z: (Math.random() - .5) * 18 };
                 mesh.position.set(p.x, p.y, p.z); nps.push(p); sc.add(mesh);
             }
             for (let i = 0; i < nps.length; i++) {
                 for (let j = i + 1; j < nps.length; j++) {
                     const d = Math.sqrt((nps[i].x - nps[j].x) ** 2 + (nps[i].y - nps[j].y) ** 2);
-                    if (d < 16) {
+                    if (d < 22) {
                         const lg = new THREE.BufferGeometry().setFromPoints([
                             new THREE.Vector3(nps[i].x, nps[i].y, nps[i].z),
                             new THREE.Vector3(nps[j].x, nps[j].y, nps[j].z)
                         ]);
-                        sc.add(new THREE.Line(lg, new THREE.LineBasicMaterial({ color: 0x2a7c7c, transparent: true, opacity: .07 })));
+                        sc.add(new THREE.Line(lg, new THREE.LineBasicMaterial({ color: 0x2a7c7c, transparent: true, opacity: .15 })));
                     }
                 }
             }
@@ -3405,7 +3284,7 @@
             }
 
             let pmx = 0, pmy = 0;
-            document.addEventListener('mousemove', e => { pmx = (e.clientX / W() - .5) * 2; pmy = (e.clientY / H() - .5) * 2 });
+            // Hover movement removed as requested
             window.addEventListener('resize', () => { rdr.setSize(W(), H()); cam.aspect = W() / H(); cam.updateProjectionMatrix() });
 
             const clk = new THREE.Clock();
@@ -3417,8 +3296,6 @@
                 oct.rotation.y = -t * .16; oct.rotation.z = t * .09;
                 tet.rotation.x = t * .22; tet.rotation.z = t * .15;
                 tor.rotation.z = t * .08; tor.rotation.y = t * .12;
-                cam.position.x += (pmx * 3.5 - cam.position.x) * .04;
-                cam.position.y += (-pmy * 2.5 - cam.position.y) * .04;
                 cam.lookAt(0, 0, 0);
                 rdr.render(sc, cam);
             }
@@ -3485,7 +3362,7 @@
                 const el = document.querySelector(sel);
                 if (el) { el.classList.remove('rx', 'd1', 'd2', 'd3', 'd4'); el.style.transition = 'none'; }
             });
-            document.querySelectorAll('#S2 .fc').forEach(c => {
+            document.querySelectorAll('#S2 .fc, .sk-tier').forEach(c => {
                 c.classList.remove('rx', 'd1', 'd2', 'd3', 'd4'); c.style.transition = 'none';
             });
 
@@ -3548,10 +3425,10 @@
                 y: 30, opacity: 0,
                 scrollTrigger: { trigger: '#S4', start: 'top 70%', end: 'top 40%', scrub: 1.2 }
             });
-            gsap.from('.ticker-row', {
-                y: 40, opacity: 0,
-                stagger: 0.15,
-                scrollTrigger: { trigger: '.ticker-wall', start: 'top 85%', end: 'top 40%', scrub: 1.2 }
+            gsap.from('.sk-tier', {
+                y: 60, opacity: 0, scale: 0.95, rotateX: -5,
+                stagger: 0.1,
+                scrollTrigger: { trigger: '.skills-tiered', start: 'top 85%', end: 'top 40%', scrub: 1.2 }
             });
 
             /* ═══ 6. S5 CONTACT — heading flips up, terminal rotates in ═══ */
