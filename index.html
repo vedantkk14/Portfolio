@@ -150,7 +150,7 @@
             }
             40% {
                 opacity: 1;
-                clip-path: inset(0 0 0 0);
+                clip-path: inset(-20% -20% -20% -20%);
                 transform: translateY(-10px) scaleY(0.8) scaleX(1.1);
                 filter: blur(2px);
                 color: var(--c3);
@@ -160,7 +160,7 @@
             }
             100% {
                 opacity: 1;
-                clip-path: inset(0 0 0 0);
+                clip-path: inset(-20% -20% -20% -20%);
                 transform: translateY(0) scaleY(1) scaleX(1);
                 filter: blur(0);
             }
@@ -3088,8 +3088,8 @@
 
             <div class="story-divider"></div>
 
-            <p class="story-line sl">Outside of tech — I'm a big reader (mostly non-fiction, though a good thriller never hurts)
-                and someone who takes <span class="hl">fitness</span> pretty seriously. Hitting the gym is less of a routine and
+            <p class="story-line sl">Outside the tech world, I'm a big reader and someone who takes <span class="hl">fitness</span> pretty seriously. 
+                Hitting the gym and staying fit is less of a routine and
                 more of a reset button for me. I think staying sharp physically and mentally makes for a
                 <span class="hl">better engineer</span>, and honestly, a better human.</p>
 
@@ -3652,12 +3652,15 @@
             sc.add(new THREE.Points(pg2, new THREE.PointsMaterial({ size: .09, vertexColors: true, transparent: true, opacity: .55 })));
 
             /* Neural nodes */
+            const isMobile = window.innerWidth < 900;
             const nps = [];
             for (let i = 0; i < 12; i++) {
                 const g = new THREE.SphereGeometry(.14 + Math.random() * .16, 6, 6);
                 const m = new THREE.MeshBasicMaterial({ color: i % 3 === 0 ? 0x2a7c7c : i % 3 === 1 ? 0xc9a96e : 0x7c6aad, transparent: true, opacity: .75 });
                 const mesh = new THREE.Mesh(g, m);
-                const p = { x: Math.random() * 18 + 12, y: (Math.random() - .5) * 24, z: (Math.random() - .5) * 18 };
+                const baseX = isMobile ? 0 : 20;
+                const baseY = isMobile ? 5 : 0;
+                const p = { x: baseX + (Math.random() - .5) * 16, y: baseY + (Math.random() - .5) * 20, z: (Math.random() - .5) * 18 };
                 mesh.position.set(p.x, p.y, p.z); nps.push(p); sc.add(mesh);
             }
             for (let i = 0; i < nps.length; i++) {
@@ -3673,7 +3676,6 @@
                 }
             }
 
-            const isMobile = window.innerWidth < 900;
             if (isMobile) {
                 ico.position.set(0, 5, -12);
                 oct.position.set(-6, -2, -8);
