@@ -617,7 +617,7 @@
             left: 0;
             right: 0;
             height: 120px;
-            background: #1a1200;
+            background: #0e0e0e;
             clip-path: polygon(0 100%, 100% 0, 100% 100%)
         }
 
@@ -643,10 +643,12 @@
             gap: 3rem 4rem;
         }
 
-        .s2-cards {
+        .s2-cols {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.2rem;
+            gap: 0;
+            margin-top: 2rem;
+            position: relative;
         }
 
         @media (max-width: 900px) {
@@ -796,105 +798,117 @@
             gap: 1.2rem
         }
 
-        .fc {
-            background: rgba(255, 255, 255, .04);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(201, 169, 110, .2);
-            border-radius: 14px;
-            padding: 1.75rem;
-            transition: transform .5s cubic-bezier(.34, 1.4, .64, 1),
-                box-shadow .4s, border-color .4s;
+        .s2-col {
             position: relative;
-            overflow: hidden
+            padding: 2rem 3rem;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.3s;
         }
 
-        .fc::before {
-            content: '';
+        .s2-col:last-child {
+            border-right: none;
+        }
+
+        .s2-col-num {
+            font-family: var(--fm, monospace);
+            font-size: 6rem;
+            font-weight: 900;
+            color: var(--col-accent);
+            opacity: 0.03;
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            transition: left .5s
+            left: 2.5rem;
+            line-height: 0.8;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            z-index: 0;
+            letter-spacing: -0.05em;
+            will-change: transform, opacity;
+            transform: translate3d(0, 0, 0);
         }
 
-        .fc:hover {
-            transform: translateX(-10px) rotateY(4deg);
-            box-shadow: 20px 10px 50px rgba(0, 0, 0, .5), -2px 0 20px rgba(201, 169, 110, .15);
-            border-color: rgba(201, 169, 110, .4)
+        .s2-col:hover .s2-col-num {
+            opacity: 0.12;
+            transform: translate3d(0, -5px, 0);
         }
 
-        .fc:hover::before {
-            left: 100%
-        }
-
-        .fc-icon {
-            font-size: 1.4rem;
-            margin-bottom: .6rem
-        }
-
-        .fc-t {
-            font-family: var(--sy);
+        .s2-col-t {
+            font-family: var(--fm, monospace);
             font-size: 1.05rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             color: #f4efe6;
-            margin-bottom: .4rem
+            position: relative;
+            z-index: 1;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
         }
 
-        .fc-b {
-            font-family: var(--fm);
-            font-size: .72rem;
-            color: rgba(244, 239, 230, .45);
-            line-height: 1.6
+        .s2-col-line {
+            width: 100%;
+            height: 2px;
+            background: var(--col-accent);
+            margin-bottom: 1.5rem;
+            transform-origin: left center;
+            transform: scaleX(0.12);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 1;
+            will-change: transform;
         }
 
-        .fc-nums {
-            display: flex;
-            gap: 2.5rem
+        .s2-col:hover .s2-col-line {
+            transform: scaleX(1);
         }
 
-        .fc-n {
-            text-align: center
+        .s2-col-b {
+            font-family: var(--fm, monospace);
+            font-size: 0.8rem;
+            line-height: 1.8;
+            color: rgba(244, 239, 230, 0.55);
+            position: relative;
+            z-index: 1;
         }
 
-        .fc-num {
-            font-family: var(--fd);
-            font-size: 3rem;
-            background: linear-gradient(135deg, var(--gold), var(--c3));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1
+        @media(max-width: 900px) {
+            .s2-cols {
+                grid-template-columns: 1fr;
+            }
+            .s2-col {
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                padding: 2.5rem 1rem;
+            }
+            .s2-col:last-child {
+                border-bottom: none;
+            }
+            .s2-col-num {
+                left: 0.5rem;
+            }
         }
 
-        .fc-nl {
-            font-family: var(--fm);
-            font-size: .65rem;
-            color: rgba(244, 239, 230, .4);
-            margin-top: .2rem;
-            letter-spacing: .1em;
-            text-transform: uppercase
-        }
-
-        /* ═══════════ S3 PROJECTS — GRID ═══════════ */
+        /* ═══════════ S3 PROJECTS — MAGAZINE LAYOUT ═══════════ */
         #S3 {
-            min-height: 100vh;
-            background: #1a1200;
-            padding: 8rem 0;
+            background: #0e0e0e;
+            padding: 8rem 0 4rem;
             overflow: hidden;
-            position: relative
+            position: relative;
         }
 
         .s3-bg {
             position: absolute;
             inset: 0;
-            background-image: radial-gradient(circle at 20% 50%, rgba(201, 169, 110, .08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(42, 124, 124, .08) 0%, transparent 50%)
+            background-image:
+                radial-gradient(circle at 15% 30%, rgba(0, 201, 177, .04) 0%, transparent 50%),
+                radial-gradient(circle at 85% 70%, rgba(255, 140, 66, .04) 0%, transparent 50%);
         }
 
         .s3-hd {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 1.5rem;
             position: relative;
-            z-index: 1
+            z-index: 1;
         }
 
         .s3-tag {
@@ -903,7 +917,7 @@
             color: var(--gold);
             letter-spacing: .25em;
             text-transform: uppercase;
-            margin-bottom: .75rem
+            margin-bottom: .75rem;
         }
 
         .s3-title {
@@ -911,7 +925,7 @@
             font-size: clamp(3.5rem, 9vw, 8rem);
             letter-spacing: .04em;
             color: #f4efe6;
-            line-height: .9
+            line-height: .9;
         }
 
         .s3-title em {
@@ -919,122 +933,243 @@
             font-style: italic;
             color: var(--c3);
             display: block;
-            font-size: .6em
+            font-size: .6em;
         }
 
-        .proj-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 6vw;
-            position: relative;
-            z-index: 1
-        }
-
-        .pj {
-            border-radius: 20px;
-            padding: 2.25rem;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, .06);
-            transition: transform .45s, box-shadow .45s, border-color .45s
-        }
-
-        .pj:nth-child(1) {
-            background: linear-gradient(145deg, #1e3a3a, #0f2020)
-        }
-
-        .pj:nth-child(2) {
-            background: linear-gradient(145deg, #3a2a1a, #201508)
-        }
-
-        .pj:nth-child(3) {
-            background: linear-gradient(145deg, #1a1a3a, #0d0d20)
-        }
-
-        .pj:nth-child(4) {
-            background: linear-gradient(145deg, #2a1a2a, #180d18)
-        }
-
-        .pj::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--c3), var(--gold), transparent);
-            opacity: 0;
-            transition: opacity .3s
-        }
-
-        .pj:hover::before {
-            opacity: 1
-        }
-
-        .pj:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
-            border-color: rgba(42, 124, 124, .25)
-        }
-
-        .pj-no {
-            font-family: var(--fd);
-            font-size: 5.5rem;
-            position: absolute;
-            top: .5rem;
-            right: 1.5rem;
-            line-height: 1;
-            opacity: .06;
-            color: #fff;
-            pointer-events: none
-        }
-
-        .pj-ic {
-            font-size: 2rem;
-            margin-bottom: 1rem
-        }
-
-        .pj-t {
-            font-family: var(--sy);
-            font-size: 1.15rem;
-            color: #f4efe6;
-            margin-bottom: .6rem;
-            line-height: 1.25
-        }
-
-        .pj-d {
+        .s3-sub {
             font-family: var(--fm);
             font-size: .72rem;
-            color: rgba(244, 239, 230, .45);
-            line-height: 1.8;
-            margin-bottom: 1.25rem
+            color: rgba(244, 239, 230, .3);
+            letter-spacing: .12em;
+            margin-top: 1rem;
         }
 
-        .pj-tags {
+        /* ── Project rows container ── */
+        .proj-rows {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5vw;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Divider between projects ── */
+        .pj-divider {
+            position: relative;
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, .06);
+            margin: 0;
+        }
+
+        .pj-divider-num {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--fd);
+            font-size: 5rem;
+            color: rgba(255, 255, 255, .03);
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* ── Single project row ── */
+        .pj-row {
+            display: grid;
+            grid-template-columns: 55% 45%;
+            gap: 3.5rem;
+            align-items: center;
+            min-height: 520px;
+            padding: 4rem 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+        }
+
+        .pj-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Even rows: content left, image right */
+        .pj-row.pj-even {
+            grid-template-columns: 45% 55%;
+        }
+
+        .pj-row.pj-even .pj-visual {
+            order: 2;
+        }
+
+        .pj-row.pj-even .pj-content {
+            order: 1;
+        }
+
+        /* ── Per-project accent colors ── */
+        .pj-row[data-accent="teal"] {
+            --pj-accent: #00C9B1;
+            --pj-accent-rgb: 0,201,177;
+            --pj-glow: rgba(0, 201, 177, .12);
+        }
+        .pj-row[data-accent="saffron"] {
+            --pj-accent: #FF8C42;
+            --pj-accent-rgb: 255,140,66;
+            --pj-glow: rgba(255, 140, 66, .12);
+        }
+        .pj-row[data-accent="gold"] {
+            --pj-accent: #F4C430;
+            --pj-accent-rgb: 244,196,48;
+            --pj-glow: rgba(244, 196, 48, .12);
+        }
+        .pj-row[data-accent="green"] {
+            --pj-accent: #7FD962;
+            --pj-accent-rgb: 127,217,98;
+            --pj-glow: rgba(127, 217, 98, .12);
+        }
+
+        /* ── Visual panel (browser mockup) ── */
+        .pj-visual {
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+        }
+
+        .pj-row.visible .pj-visual {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pj-mockup-glow {
+            position: absolute;
+            inset: -20px;
+            background: var(--pj-glow);
+            border-radius: 24px;
+            filter: blur(40px);
+            z-index: 0;
+            opacity: 0;
+            transition: opacity .5s;
+        }
+
+        .pj-visual:hover .pj-mockup-glow {
+            opacity: 1;
+        }
+
+        .pj-mockup {
+            position: relative;
+            z-index: 1;
+            background: #1a1a1a;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, .08);
+            transition: transform .5s cubic-bezier(.25,.8,.25,1), box-shadow .5s;
+        }
+
+        .pj-visual:hover .pj-mockup {
+            transform: scale(1.03);
+            box-shadow: 0 20px 60px rgba(0,0,0,.5);
+        }
+
+
+
+        .pj-placeholder {
             display: flex;
-            flex-wrap: wrap;
-            gap: .35rem;
-            margin-bottom: 1.5rem
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            border: 2px dashed rgba(255,255,255,.1);
+            margin: 1rem;
+            border-radius: 8px;
+            font-family: var(--fm);
+            font-size: .75rem;
+            color: rgba(255,255,255,.2);
+            letter-spacing: .08em;
+            text-align: center;
+            padding: 2rem;
         }
 
-        .ptag {
+        /* ── Content panel ── */
+        .pj-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .6s cubic-bezier(.16,1,.3,1) .15s, transform .6s cubic-bezier(.16,1,.3,1) .15s;
+        }
+
+        .pj-row.visible .pj-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pj-label {
+            font-family: var(--fm);
+            font-size: .7rem;
+            color: rgba(244, 239, 230, .3);
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .pj-name {
+            font-family: var(--sy);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            color: #f4efe6;
+            line-height: 1.1;
+            margin-bottom: .6rem;
+        }
+
+        .pj-tagline {
+            font-family: var(--fs);
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--pj-accent);
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .pj-desc {
+            font-family: var(--fs);
+            font-size: .95rem;
+            color: rgba(244, 239, 230, .5);
+            line-height: 1.85;
+            margin-bottom: 1.75rem;
+        }
+
+        .pj-stack-label {
             font-family: var(--fm);
             font-size: .6rem;
-            background: rgba(42, 124, 124, .15);
-            border: 1px solid rgba(42, 124, 124, .3);
-            color: rgba(42, 212, 212, .8);
-            padding: .2rem .6rem;
-            border-radius: 100px
+            color: rgba(244, 239, 230, .25);
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            margin-bottom: .5rem;
         }
 
+        .pj-stack {
+            font-family: var(--fm);
+            font-size: .72rem;
+            color: rgba(244, 239, 230, .4);
+            letter-spacing: .04em;
+            margin-bottom: 1.5rem;
+        }
+
+        .pj-hr {
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, .08);
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ── Buttons ── */
         .pj-actions {
             display: flex;
             gap: .8rem;
             align-items: center;
-            flex-wrap: wrap
+            flex-wrap: wrap;
         }
 
         .pj-btn {
@@ -1043,48 +1178,217 @@
             letter-spacing: .08em;
             text-transform: uppercase;
             text-decoration: none;
-            padding: .55rem 1.1rem;
+            padding: .65rem 1.5rem;
             border-radius: 100px;
             display: inline-flex;
             align-items: center;
-            gap: .4rem;
-            transition: all .3s
+            gap: .45rem;
+            transition: all .35s cubic-bezier(.25,.8,.25,1);
         }
 
         .pj-btn.primary {
-            background: rgba(42, 124, 124, .2);
-            border: 1px solid rgba(42, 124, 124, .4);
-            color: var(--c3)
+            background: var(--pj-accent);
+            border: 1px solid var(--pj-accent);
+            color: #0a0a0a;
+            font-weight: 500;
+        }
+
+        .pj-btn.primary .pj-arrow {
+            display: inline-block;
+            transition: transform .3s;
         }
 
         .pj-btn.primary:hover {
-            background: var(--c3);
-            color: #fff;
-            border-color: var(--c3)
+            box-shadow: 0 4px 24px rgba(var(--pj-accent-rgb), .4);
+            transform: translateY(-2px);
+        }
+
+        .pj-btn.primary:hover .pj-arrow {
+            transform: translateX(5px);
         }
 
         .pj-btn.gh {
-            background: rgba(255, 255, 255, .05);
+            background: transparent;
             border: 1px solid rgba(255, 255, 255, .15);
-            color: rgba(244, 239, 230, .6)
+            color: rgba(244, 239, 230, .55);
         }
 
         .pj-btn.gh:hover {
-            background: rgba(255, 255, 255, .12);
+            background: rgba(255, 255, 255, .08);
             color: #f4efe6;
-            border-color: rgba(255, 255, 255, .3)
+            border-color: rgba(255, 255, 255, .3);
         }
 
         .pj-btn svg {
             width: 14px;
             height: 14px;
-            fill: currentColor
+            fill: currentColor;
         }
 
-        @media(max-width:700px) {
-            .proj-grid {
-                grid-template-columns: 1fr
+        /* ── Responsive ── */
+        @media(max-width:850px) {
+            .pj-row,
+            .pj-row.pj-even {
+                grid-template-columns: 1fr;
+                min-height: auto;
+                gap: 2rem;
+                padding: 3rem 0;
             }
+            .pj-row.pj-even .pj-visual { order: 1; }
+            .pj-row.pj-even .pj-content { order: 2; }
+            .pj-name {
+                font-size: clamp(1.6rem, 6vw, 2.4rem);
+            }
+            .pj-placeholder {
+                min-height: 220px;
+            }
+        }
+
+        /* ── Carousel ── */
+        .pj-carousel {
+            position: relative;
+        }
+
+        .pj-slides {
+            position: relative;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+
+        .pj-slides img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity .25s ease;
+            display: block;
+        }
+
+        .pj-slides img.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        /* Nav arrows — hidden by default, show on hover */
+        .pj-arrow-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0,0,0,.55);
+            border: 1px solid rgba(255,255,255,.1);
+            color: rgba(255,255,255,.7);
+            font-size: .9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity .3s, background .3s, color .3s;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .pj-chrome {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: .65rem 1rem;
+            background: #111;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+        }
+
+        .pj-chrome-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .pj-chrome-dot:nth-child(1) { background: #ff5f57; }
+        .pj-chrome-dot:nth-child(2) { background: #ffbd2e; }
+        .pj-chrome-dot:nth-child(3) { background: #28c840; }
+
+        /* Custom Hover Cursor */
+        .pj-carousel {
+            cursor: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pj-cursor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            background: var(--pj-accent, #fff);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--fm, monospace);
+            font-size: 0.85rem;
+            font-weight: 800;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            will-change: transform;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .pj-carousel:hover .pj-cursor.active {
+            opacity: 1;
+        }
+
+        .pj-chrome {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: .65rem 1rem;
+            background: #111;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+        }
+
+        .pj-chrome-url {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--fm, monospace);
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.1em;
+            background: rgba(255,255,255,0.05);
+            padding: 4px 16px;
+            border-radius: 20px;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pj-chrome-url svg {
+            width: 10px;
+            height: 10px;
+            opacity: 0.5;
+        }
+
+        .pj-chrome-url span.pj-meta-curr {
+            color: var(--pj-accent);
+            font-weight: 600;
+        }
+
+
+
+        @media(max-width:850px) {
+            .pj-carousel { cursor: auto; }
+            .pj-cursor { display: none !important; }
         }
 
         .c-dots {
@@ -1751,7 +2055,7 @@
 
         /* ═══════════ MARQUEE ═══════════ */
         .marq-wrap {
-            background: #1a1200;
+            background: #0e0e0e;
             overflow: hidden;
             padding: .85rem 0;
             border-top: 1px solid rgba(201, 169, 110, .1);
@@ -2666,9 +2970,9 @@
         <a href="#S1" class="nav-logo">VEDANT</a>
         <ul class="nav-ul">
             <li><a href="#S2">About</a></li>
+            <li><a href="#S_STORY">Story</a></li>
             <li><a href="#S3">Projects</a></li>
             <li><a href="#S4">Stack</a></li>
-            <li><a href="#S_STORY">Story</a></li>
             <li><a href="#S5">Contact</a></li>
         </ul>
     </nav>
@@ -2728,7 +3032,7 @@
                     <div class="s2-photo-accent"></div>
                     <div class="s2-photo">
                         <img src="photo.jpg" alt="Vedant Kolhapure">
-                        <span class="s2-photo-label">Vedant K.</span>
+                        <span class="s2-photo-label">Vedant Kolhapure.</span>
                     </div>
                     <div class="s2-photo-dot d1"></div>
                     <div class="s2-photo-dot d2"></div>
@@ -2740,22 +3044,25 @@
             </div>
 
             <!-- Row 3: Feature Cards -->
-            <div class="s2-cards">
-                <div class="fc rx d1">
-                    <div class="fc-icon">🧠</div>
-                    <div class="fc-t">Machine Learning</div>
-                    <div class="fc-b">Supervised learning · Feature engineering · XGBoost · Random Forest · Model
-                        pipelines</div>
+            <!-- Row 3: Feature Columns -->
+            <div class="s2-cols">
+                <div class="s2-col rx d1" style="--col-accent: #00C9B1;">
+                    <div class="s2-col-num">01</div>
+                    <div class="s2-col-t">AI & LLMs</div>
+                    <div class="s2-col-line"></div>
+                    <div class="s2-col-b">LangChain · RAG · FAISS · HuggingFace · Prompt Engineering · Fine-tuning · LLM Pipelines</div>
                 </div>
-                <div class="fc rx d2">
-                    <div class="fc-icon">📊</div>
-                    <div class="fc-t">Data Science</div>
-                    <div class="fc-b">EDA · Pandas · NumPy · Statistical analysis · Preprocessing · Visualization</div>
+                <div class="s2-col rx d2" style="--col-accent: #F4C430;">
+                    <div class="s2-col-num">02</div>
+                    <div class="s2-col-t">Backend Engineering</div>
+                    <div class="s2-col-line"></div>
+                    <div class="s2-col-b">Django · FastAPI · Flask · REST APIs · Python · SQL · Server-side Architecture</div>
                 </div>
-                <div class="fc rx d3">
-                    <div class="fc-icon">🌐</div>
-                    <div class="fc-t">Backend Web</div>
-                    <div class="fc-b">Python · FastAPI · Flask · Django · REST APIs</div>
+                <div class="s2-col rx d3" style="--col-accent: #A78BFA;">
+                    <div class="s2-col-num">03</div>
+                    <div class="s2-col-t">ML & Data</div>
+                    <div class="s2-col-line"></div>
+                    <div class="s2-col-b">Scikit-learn · TensorFlow · PyTorch · NLP · Model Training · Pandas · NumPy</div>
                 </div>
             </div>
         </div>
@@ -2769,14 +3076,14 @@
             <div class="story-tag">Beyond The Code</div>
             <h2 class="story-title">My <em>Story</em></h2>
 
-            <p class="story-line sl">I'm a developer who genuinely enjoys the craft — not just writing code, but thinking through
-                <span class="hl">why something should be built a certain way</span> and making sure it holds up when real people use it.
-                My work sits at the intersection of <span class="hl">AI and backend engineering</span>, and I find that combination
-                compelling: intelligent systems are only as good as the infrastructure they run on.</p>
+            <p class="story-line sl">I'm a developer who genuinely enjoys the craft; not just writing code, but thinking about
+                <span class="hl">why something should be built in a certain way</span> and making sure it works reliably when real people use it.
+                I work at the intersection of <span class="hl">AI and backend engineering</span>, and I find that combination
+                really works for me: intelligent systems are only as good as the infrastructure they run on.</p>
 
-            <p class="story-line sl">AI is where my curiosity runs deepest — understanding how <span class="hl">language models</span> work,
-                making them reliable in production, and building systems that go beyond demos. At the same time, I take
-                backend development seriously as a discipline in its own right: <span class="hl">clean API design</span>,
+            <p class="story-line sl">AI is where my curiosity runs the deepest, understanding how <span class="hl">language models</span> work,
+                making their use in real products, and building systems that go beyond demos. At the same time, I take
+                backend development seriously as a discipline as it carries the weight of the entire system: <span class="hl">clean API design</span>,
                 thoughtful data flow, and code that other people can actually work with.</p>
 
             <div class="story-divider"></div>
@@ -2797,7 +3104,7 @@
                 </div>
                 <div class="story-fact">
                     <div class="sf-label">Motto</div>
-                    <div class="sf-val">Ship it, then polish it</div>
+                    <div class="sf-val">Curious by default, builder by choice.</div>
                 </div>
             </div>
         </div>
@@ -2835,92 +3142,183 @@
         <div class="s3-hd rx">
             <div class="s3-tag">Selected Work</div>
             <h2 class="s3-title">Projects<em>that shipped</em></h2>
+            <div class="s3-sub">Four projects. Real clients. Real users.</div>
         </div>
-        <div class="proj-grid">
-            <div class="pj">
-                <div class="pj-no">01</div>
-                <div class="pj-ic">🎓</div>
-                <div class="pj-t">Student Performance Predictor</div>
-                <p class="pj-d">End-to-end ML pipeline predicting academic outcomes from socioeconomic &amp; behavioral
-                    features. Linear Regression vs Random Forest vs XGBoost.</p>
-                <div class="pj-tags">
-                    <span class="ptag">Python</span><span class="ptag">Scikit-learn</span><span
-                        class="ptag">XGBoost</span><span class="ptag">Pandas</span><span class="ptag">EDA</span>
+        <div class="proj-rows">
+
+            <!-- ─── 01 UniMate AI ─── -->
+            <div class="pj-row" data-accent="teal">
+                <div class="pj-visual">
+                    <div class="pj-mockup-glow"></div>
+                    <div class="pj-mockup">
+                        <div class="pj-chrome">
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <div class="pj-chrome-url">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                <span>VIEW <span class="pj-meta-curr">1</span> OF 4</span>
+                            </div>
+                        </div>
+                        <div class="pj-carousel">
+                            <div class="pj-slides">
+                                <img src="proj_images/unimateai/mate1.png" alt="UniMate AI - 1" class="active">
+                                <img src="proj_images/unimateai/mate2.png" alt="UniMate AI - 2">
+                                <img src="proj_images/unimateai/mate3.png" alt="UniMate AI - 3">
+                                <img src="proj_images/unimateai/mate4.png" alt="UniMate AI - 4">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="pj-actions">
-                    <a href="#" class="pj-btn primary">Case Study →</a>
-                    <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                        </svg>
-                        GitHub
-                    </a>
-                </div>
-            </div>
-            <div class="pj">
-                <div class="pj-no">02</div>
-                <div class="pj-ic">🎬</div>
-                <div class="pj-t">Movie Recommendation Engine</div>
-                <p class="pj-d">Content-based filtering with NLP — TF-IDF vectorization and cosine similarity.
-                    Cold-start resistant, no user history required.</p>
-                <div class="pj-tags">
-                    <span class="ptag">NLP</span><span class="ptag">TF-IDF</span><span class="ptag">Python</span><span
-                        class="ptag">Cosine Sim</span>
-                </div>
-                <div class="pj-actions">
-                    <a href="#" class="pj-btn primary">Case Study →</a>
-                    <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                        </svg>
-                        GitHub
-                    </a>
-                </div>
-            </div>
-            <div class="pj">
-                <div class="pj-no">03</div>
-                <div class="pj-ic">📚</div>
-                <div class="pj-t">Book Recommendation App</div>
-                <p class="pj-d">Full-stack Flask application serving smart book suggestions. ML model deployed via REST
-                    endpoints with a clean, responsive frontend.</p>
-                <div class="pj-tags">
-                    <span class="ptag">Flask</span><span class="ptag">Python</span><span class="ptag">ML</span><span
-                        class="ptag">Jinja2</span>
-                </div>
-                <div class="pj-actions">
-                    <a href="#" class="pj-btn primary">Case Study →</a>
-                    <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                        </svg>
-                        GitHub
-                    </a>
+                <div class="pj-content">
+                    <div class="pj-label">01 — AI / LLM</div>
+                    <h3 class="pj-name">UniMate AI</h3>
+                    <div class="pj-tagline">Your university's knowledge, actually accessible.</div>
+                    <p class="pj-desc">An AI study assistant built for engineering exam prep. Ingests textbooks and lecture notes into a RAG pipeline, and answers student questions with context-grounded accuracy. Supports 5 core subjects, generates quizzes, and handles out-of-syllabus queries via web search fallback.</p>
+                    <div class="pj-stack-label">Built with</div>
+                    <div class="pj-stack">LangChain · FAISS · HuggingFace · FastAPI · Streamlit</div>
+                    <hr class="pj-hr">
+                    <div class="pj-actions">
+                        <a href="#" class="pj-btn primary">Live Demo <span class="pj-arrow">→</span></a>
+                        <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
+                            <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            GitHub
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="pj">
-                <div class="pj-no">04</div>
-                <div class="pj-ic">🌐</div>
-                <div class="pj-t">Full-Stack Web Projects</div>
-                <p class="pj-d">Responsive, interactive web apps — JavaScript, HTML5/CSS3, Flask. API integration,
-                    dynamic rendering, and mobile-first design patterns.</p>
-                <div class="pj-tags">
-                    <span class="ptag">JavaScript</span><span class="ptag">HTML/CSS</span><span
-                        class="ptag">Flask</span><span class="ptag">REST</span>
+
+            <div class="pj-divider"><span class="pj-divider-num">02</span></div>
+
+            <!-- ─── 02 Solapur Swad (even = content left, image right) ─── -->
+            <div class="pj-row pj-even" data-accent="saffron">
+                <div class="pj-visual">
+                    <div class="pj-mockup-glow"></div>
+                    <div class="pj-mockup">
+                        <div class="pj-chrome">
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <div class="pj-chrome-url">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                <span>VIEW <span class="pj-meta-curr">1</span> OF 4</span>
+                            </div>
+                        </div>
+                        <div class="pj-carousel">
+                            <div class="pj-slides">
+                                <img src="proj_images/slpswad/swad1.png" alt="Solapur Swad - 1" class="active">
+                                <img src="proj_images/slpswad/swad2.png" alt="Solapur Swad - 2">
+                                <img src="proj_images/slpswad/swad3.png" alt="Solapur Swad - 3">
+                                <img src="proj_images/slpswad/swad4.png" alt="Solapur Swad - 4">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="pj-actions">
-                    <a href="#" class="pj-btn primary">Case Study →</a>
-                    <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                        </svg>
-                        GitHub
-                    </a>
+                <div class="pj-content">
+                    <div class="pj-label">02 — Full Stack</div>
+                    <h3 class="pj-name">Solapur Swad</h3>
+                    <div class="pj-tagline">Bringing a local food culture online.</div>
+                    <p class="pj-desc">A production full-stack web application built for a real client — a local food business in Solapur. Handles menu management, customer interaction, and order flow through a clean Django backend with a custom HTML/CSS/JS frontend. Live and actively used.</p>
+                    <div class="pj-stack-label">Built with</div>
+                    <div class="pj-stack">Django · Python · SQL · HTML · CSS · JavaScript</div>
+                    <hr class="pj-hr">
+                    <div class="pj-actions">
+                        <a href="#" class="pj-btn primary">Live Demo <span class="pj-arrow">→</span></a>
+                        <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
+                            <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            GitHub
+                        </a>
+                    </div>
                 </div>
             </div>
+
+            <div class="pj-divider"><span class="pj-divider-num">03</span></div>
+
+            <!-- ─── 03 NewsGist (odd = image left, content right) ─── -->
+            <div class="pj-row" data-accent="gold">
+                <div class="pj-visual">
+                    <div class="pj-mockup-glow"></div>
+                    <div class="pj-mockup">
+                        <div class="pj-chrome">
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <div class="pj-chrome-url">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                <span>VIEW <span class="pj-meta-curr">1</span> OF 4</span>
+                            </div>
+                        </div>
+                        <div class="pj-carousel">
+                            <div class="pj-slides">
+                                <img src="proj_images/newsgist/news1.png" alt="NewsGist - 1" class="active">
+                                <img src="proj_images/newsgist/news2.png" alt="NewsGist - 2">
+                                <img src="proj_images/newsgist/news3.png" alt="NewsGist - 3">
+                                <img src="proj_images/newsgist/news4.png" alt="NewsGist - 4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pj-content">
+                    <div class="pj-label">03 — NLP / Data</div>
+                    <h3 class="pj-name">NewsGist</h3>
+                    <div class="pj-tagline">The news, without the noise.</div>
+                    <p class="pj-desc">An NLP-powered news aggregation platform that fetches real-time articles and generates concise, structured summaries automatically. Includes sentiment analysis to surface emotional framing and bias at a glance — so you know not just what happened, but how it's being told.</p>
+                    <div class="pj-stack-label">Built with</div>
+                    <div class="pj-stack">Python · NLP · Flask · REST API · JavaScript</div>
+                    <hr class="pj-hr">
+                    <div class="pj-actions">
+                        <a href="#" class="pj-btn primary">Live Demo <span class="pj-arrow">→</span></a>
+                        <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
+                            <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pj-divider"><span class="pj-divider-num">04</span></div>
+
+            <!-- ─── 04 Fitness CRM (even = content left, image right) ─── -->
+            <div class="pj-row pj-even" data-accent="green">
+                <div class="pj-visual">
+                    <div class="pj-mockup-glow"></div>
+                    <div class="pj-mockup">
+                        <div class="pj-chrome">
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <div class="pj-chrome-url">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                <span>VIEW <span class="pj-meta-curr">1</span> OF 3</span>
+                            </div>
+                        </div>
+                        <div class="pj-carousel">
+                            <div class="pj-slides">
+                                <img src="proj_images/fitness_crm/crm_img1.jpg" alt="Fitness CRM - 1" class="active">
+                                <img src="proj_images/fitness_crm/crm_img2.png" alt="Fitness CRM - 2">
+                                <img src="proj_images/fitness_crm/crm_img3.png" alt="Fitness CRM - 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pj-content">
+                    <div class="pj-label">04 — Professional Work</div>
+                    <h3 class="pj-name">Fitness CRM</h3>
+                    <div class="pj-tagline">Client management, built for the gym floor.</div>
+                    <p class="pj-desc">A production-grade CRM web application built during a professional internship for a real fitness business. Manages client profiles, tracks progress, handles authentication, and eliminates manual record-keeping. Currently live and in active use by the client.</p>
+                    <div class="pj-stack-label">Built with</div>
+                    <div class="pj-stack">PHP · SQL · HTML · CSS · JavaScript</div>
+                    <hr class="pj-hr">
+                    <div class="pj-actions">
+                        <a href="#" class="pj-btn primary">Live Demo <span class="pj-arrow">→</span></a>
+                        <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
+                            <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -3545,8 +3943,8 @@
                 { el: document.getElementById('S1'), dark: false, bg: '#f4efe6', cursor: '#2a7c7c' },
                 { el: document.getElementById('S2'), dark: true, bg: '#0d1520', cursor: '#c9a96e' },
                 { el: document.getElementById('S_STORY'), dark: false, bg: '#faf8f5', cursor: '#2a7c7c' },
-                { el: document.querySelector('.marq-wrap'), dark: true, bg: '#1a1200', cursor: '#c9a96e' },
-                { el: document.getElementById('S3'), dark: true, bg: '#1a1200', cursor: '#c9a96e' },
+                { el: document.querySelector('.marq-wrap'), dark: true, bg: '#0e0e0e', cursor: '#c9a96e' },
+                { el: document.getElementById('S3'), dark: true, bg: '#0e0e0e', cursor: '#c9a96e' },
                 { el: document.getElementById('S4'), dark: false, bg: '#e8dfd0', cursor: '#2a7c7c' },
                 { el: document.getElementById('S_EDU'), dark: false, bg: '#f4efe6', cursor: '#2a7c7c' },
                 { el: document.getElementById('S_EXP'), dark: true, bg: '#0d1520', cursor: '#c9a96e' },
@@ -3604,6 +4002,162 @@
             });
         }, { threshold: .15 });
         document.querySelectorAll('.s2-r').forEach(el => fcObs.observe(el));
+
+        /* ─── PROJECT ROW SCROLL REVEAL ─── */
+        const pjObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    pjObs.unobserve(e.target);
+                }
+            });
+        }, { threshold: .15 });
+        document.querySelectorAll('.pj-row').forEach(el => pjObs.observe(el));
+
+        /* ─── PROJECT CAROUSEL SYSTEM ─── */
+        document.querySelectorAll('.pj-row').forEach(row => {
+            const carousel = row.querySelector('.pj-carousel');
+            if (!carousel) return;
+
+            const slides = carousel.querySelectorAll('.pj-slides img');
+            if (slides.length <= 1) return; // No carousel needed
+
+            let currentIndex = 0;
+            let autoAdvanceTimer = null;
+            let isAutoPlaying = true;
+            let isVisible = false;
+
+            // Create custom cursor element
+            const cursor = document.createElement('div');
+            cursor.className = 'pj-cursor';
+            cursor.textContent = 'NEXT';
+            carousel.appendChild(cursor);
+
+            let cursorState = 'NEXT';
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            let isHoveringCursor = false;
+
+            carousel.addEventListener('mousemove', (e) => {
+                const rect = carousel.getBoundingClientRect();
+                mouseX = e.clientX - rect.left;
+                mouseY = e.clientY - rect.top;
+
+                const midPoint = rect.width / 2;
+                if (mouseX > midPoint && cursorState !== 'NEXT') {
+                    cursor.textContent = 'NEXT';
+                    cursorState = 'NEXT';
+                } else if (mouseX <= midPoint && cursorState !== 'PREV') {
+                    cursor.textContent = 'PREV';
+                    cursorState = 'PREV';
+                }
+            });
+
+            carousel.addEventListener('mouseenter', (e) => {
+                const rect = carousel.getBoundingClientRect();
+                mouseX = e.clientX - rect.left;
+                mouseY = e.clientY - rect.top;
+                if (!isHoveringCursor) {
+                    cursorX = mouseX;
+                    cursorY = mouseY;
+                }
+                isHoveringCursor = true;
+                cursor.classList.add('active');
+            });
+
+            carousel.addEventListener('mouseleave', () => {
+                isHoveringCursor = false;
+                cursor.classList.remove('active');
+            });
+
+            function renderCursor() {
+                // Smooth Lerp factor of 0.2
+                cursorX += (mouseX - cursorX) * 0.2;
+                cursorY += (mouseY - cursorY) * 0.2;
+                
+                const scale = isHoveringCursor ? 'scale(1)' : 'scale(0.5)';
+                cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%) ${scale}`;
+                
+                requestAnimationFrame(renderCursor);
+            }
+            requestAnimationFrame(renderCursor);
+
+            carousel.addEventListener('click', (e) => {
+                const rect = carousel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                stopAutoPlay();
+                if (x > rect.width / 2) nextSlide();
+                else prevSlide();
+            });
+
+            function goToSlide(index) {
+                if (index === currentIndex) return;
+                slides[currentIndex].classList.remove('active');
+                currentIndex = (index + slides.length) % slides.length;
+                slides[currentIndex].classList.add('active');
+                
+                const currEl = row.querySelector('.pj-meta-curr');
+                if (currEl) currEl.textContent = currentIndex + 1;
+            }
+
+            function nextSlide() { goToSlide(currentIndex + 1); }
+            function prevSlide() { goToSlide(currentIndex - 1); }
+
+            // Auto-advance
+            function startAutoPlay() {
+                if (!isAutoPlaying || !isVisible) return;
+                clearInterval(autoAdvanceTimer);
+                autoAdvanceTimer = setInterval(nextSlide, 4000);
+            }
+
+            function stopAutoPlay() {
+                isAutoPlaying = false;
+                clearInterval(autoAdvanceTimer);
+            }
+
+            // Viewport observer for autoplay and keyboard
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    isVisible = e.isIntersecting;
+                    if (isVisible && isAutoPlaying) {
+                        startAutoPlay();
+                    } else {
+                        clearInterval(autoAdvanceTimer);
+                    }
+                });
+            }, { threshold: 0.5 });
+            observer.observe(row);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', e => {
+                if (!isVisible) return;
+                if (e.key === 'ArrowLeft') { stopAutoPlay(); prevSlide(); }
+                if (e.key === 'ArrowRight') { stopAutoPlay(); nextSlide(); }
+            });
+
+            // Swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            carousel.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            carousel.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    stopAutoPlay(); nextSlide();
+                }
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    stopAutoPlay(); prevSlide();
+                }
+            }
+        });
 
         /* ─── ANIMATED NUMBER COUNTERS ─── */
         const numObs = new IntersectionObserver(entries => {
