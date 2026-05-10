@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vedant Kolhapure | AI Engineer & Backend Developer</title>
+    <link rel="icon" type="image/png" href="logo/logo.png">
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap"
         rel="stylesheet">
@@ -37,7 +38,13 @@
 
         html {
             overflow-x: hidden;
-            scroll-behavior: auto
+            scroll-behavior: auto;
+        }
+
+        @media (max-width: 900px) {
+            html {
+                font-size: 18px;
+            }
         }
 
         body {
@@ -298,7 +305,7 @@
         .hero-grid {
             position: absolute;
             inset: 0;
-            z-index: 2;
+            z-index: 5;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -386,6 +393,9 @@
             opacity: 0;
             animation: fup .8s ease 3.5s forwards;
             flex-wrap: wrap;
+            pointer-events: auto;
+            position: relative;
+            z-index: 10;
         }
 
         .h-side {
@@ -393,13 +403,13 @@
             bottom: 5.5rem;
             left: 6vw;
             right: 6vw;
-            z-index: 2;
+            z-index: 6;
             display: flex;
             align-items: flex-end;
             justify-content: flex-end;
             opacity: 0;
             animation: fup .8s ease 3.4s forwards;
-            pointer-events: auto;
+            pointer-events: none;
         }
 
         .h-desc {
@@ -431,13 +441,14 @@
             padding: .6rem 1.4rem;
             opacity: 0;
             animation: fup .7s ease 3.6s forwards;
-            pointer-events: auto;
+            pointer-events: none;
         }
 
         .h-contact-info {
             display: flex;
             align-items: center;
             gap: 1.5rem;
+            pointer-events: auto;
         }
 
         .h-status-dot {
@@ -1223,6 +1234,33 @@
             width: 14px;
             height: 14px;
             fill: currentColor;
+        }
+
+        .pj-note {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            padding: 1.1rem 1.4rem;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 14px;
+            margin-top: 1.5rem;
+            max-width: 480px;
+        }
+
+        .pj-note svg {
+            width: 18px;
+            height: 18px;
+            color: var(--gold);
+            opacity: .8;
+            flex-shrink: 0;
+        }
+
+        .pj-note span {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: rgba(244, 239, 230, .4);
+            line-height: 1.6;
         }
 
         /* ── Responsive ── */
@@ -2969,6 +3007,17 @@
                 flex-wrap: wrap
             }
 
+            .h-scroll {
+                left: auto;
+                right: 1.5rem;
+                transform: none;
+                bottom: 2rem;
+            }
+
+            .h-scroll::after {
+                height: 24px;
+            }
+
             .exp-inner {
                 display: flex;
                 flex-direction: column;
@@ -3206,7 +3255,7 @@
                             <span class="pj-chrome-dot"></span>
                             <div class="pj-chrome-url">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                                <span>VIEW <span class="pj-meta-curr">1</span> OF 4</span>
+                                <span>VIEW <span class="pj-meta-curr">1</span> OF 7</span>
                             </div>
                         </div>
                         <div class="pj-carousel">
@@ -3215,6 +3264,9 @@
                                 <img src="proj_images/unimateai/mate2.png" alt="UniMate AI - 2">
                                 <img src="proj_images/unimateai/mate3.png" alt="UniMate AI - 3">
                                 <img src="proj_images/unimateai/mate4.png" alt="UniMate AI - 4">
+                                <img src="proj_images/unimateai/mate5.png" alt="UniMate AI - 5">
+                                <img src="proj_images/unimateai/mate6.png" alt="UniMate AI - 6">
+                                <img src="proj_images/unimateai/mate7.png" alt="UniMate AI - 7">
                             </div>
                         </div>
                     </div>
@@ -3229,7 +3281,7 @@
                     <hr class="pj-hr">
                     <div class="pj-actions">
                         <a href="#" class="pj-btn primary">Live Demo <span class="pj-arrow">→</span></a>
-                        <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
+                        <a href="https://github.com/vedantkk14/UniMate.ai" target="_blank" class="pj-btn gh">
                             <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                             GitHub
                         </a>
@@ -3240,7 +3292,7 @@
             <div class="pj-divider"><span class="pj-divider-num">02</span></div>
 
             <!-- ─── 02 Solapur Swad (even = content left, image right) ─── -->
-            <div class="pj-row pj-even" data-accent="saffron">
+            <!-- <div class="pj-row pj-even" data-accent="saffron">
                 <div class="pj-visual">
                     <div class="pj-mockup-glow"></div>
                     <div class="pj-mockup">
@@ -3273,18 +3325,17 @@
                     <hr class="pj-hr">
                     <div class="pj-actions">
                         <a href="#" class="pj-btn primary">Live Demo <span class="pj-arrow">→</span></a>
-                        <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
+                        <a href="https://github.com/vedantkk14/Solapur-Swad" target="_blank" class="pj-btn gh">
                             <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                             GitHub
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="pj-divider"><span class="pj-divider-num">03</span></div>
 
-            <!-- ─── 03 NewsGist (odd = image left, content right) ─── -->
-            <div class="pj-row" data-accent="gold">
+            <!-- ─── 02 MindPluse (even = content left, image right) ─── -->
+            <div class="pj-row pj-even" data-accent="saffron">
                 <div class="pj-visual">
                     <div class="pj-mockup-glow"></div>
                     <div class="pj-mockup">
@@ -3299,10 +3350,56 @@
                         </div>
                         <div class="pj-carousel">
                             <div class="pj-slides">
+                                <img src="proj_images/mindpulse/mind1.png" alt="MindPulse - 1" class="active">
+                                <img src="proj_images/mindpulse/mind2.png" alt="MindPulse - 2">
+                                <img src="proj_images/mindpulse/mind3.png" alt="MindPulse - 3">
+                                <img src="proj_images/mindpulse/mind4.png" alt="MindPulse - 4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pj-content">
+                    <div class="pj-label">02 — Machine Learning</div>
+                    <h3 class="pj-name">MindPulse</h3>
+                    <div class="pj-tagline">Predicting epileptic seizures using EEG brain signal data.</div>
+                    <p class="pj-desc">A machine learning-powered healthcare web application designed to predict the likelihood of epileptic seizures from EEG brain signal data. Built using an SVM model with advanced preprocessing techniques like StandardScaler and PCA, achieving 97% accuracy. Features a Flask-based interface where users can upload EEG CSV data and receive predictions with probability scores through a clean, responsive frontend.</p>
+                    <div class="pj-stack-label">Built with</div>
+                    <div class="pj-stack">Python · Flask · Scikit-learn · Pandas · NumPy · HTML · CSS · JavaScript · Joblib</div>
+                    <hr class="pj-hr">
+                    <div class="pj-actions">
+                        <a href="#" class="pj-btn primary">Live Demo <span class="pj-arrow">→</span></a>
+                        <a href="https://github.com/vedantkk14/MindPulse2" target="_blank" class="pj-btn gh">
+                            <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="pj-divider"><span class="pj-divider-num">03</span></div>
+
+            <!-- ─── 03 NewsGist (odd = image left, content right) ─── -->
+            <div class="pj-row" data-accent="gold">
+                <div class="pj-visual">
+                    <div class="pj-mockup-glow"></div>
+                    <div class="pj-mockup">
+                        <div class="pj-chrome">
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <span class="pj-chrome-dot"></span>
+                            <div class="pj-chrome-url">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                <span>VIEW <span class="pj-meta-curr">1</span> OF 5</span>
+                            </div>
+                        </div>
+                        <div class="pj-carousel">
+                            <div class="pj-slides">
                                 <img src="proj_images/newsgist/news1.png" alt="NewsGist - 1" class="active">
                                 <img src="proj_images/newsgist/news2.png" alt="NewsGist - 2">
                                 <img src="proj_images/newsgist/news3.png" alt="NewsGist - 3">
                                 <img src="proj_images/newsgist/news4.png" alt="NewsGist - 4">
+                                <img src="proj_images/newsgist/news5.png" alt="NewsGist - 5">
                             </div>
                         </div>
                     </div>
@@ -3317,7 +3414,7 @@
                     <hr class="pj-hr">
                     <div class="pj-actions">
                         <a href="#" class="pj-btn primary">Live Demo <span class="pj-arrow">→</span></a>
-                        <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
+                        <a href="https://github.com/vedantkk14/NewsGist" target="_blank" class="pj-btn gh">
                             <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                             GitHub
                         </a>
@@ -3338,14 +3435,21 @@
                             <span class="pj-chrome-dot"></span>
                             <div class="pj-chrome-url">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                                <span>VIEW <span class="pj-meta-curr">1</span> OF 3</span>
+                                <span>VIEW <span class="pj-meta-curr">1</span> OF 10</span>
                             </div>
                         </div>
                         <div class="pj-carousel">
                             <div class="pj-slides">
-                                <img src="proj_images/fitness_crm/crm_img1.jpg" alt="Fitness CRM - 1" class="active">
+                                <img src="proj_images/fitness_crm/crm_img1.png" alt="Fitness CRM - 1" class="active">
                                 <img src="proj_images/fitness_crm/crm_img2.png" alt="Fitness CRM - 2">
                                 <img src="proj_images/fitness_crm/crm_img3.png" alt="Fitness CRM - 3">
+                                <img src="proj_images/fitness_crm/crm_img4.png" alt="Fitness CRM - 4">
+                                <img src="proj_images/fitness_crm/crm_img5.png" alt="Fitness CRM - 5">
+                                <img src="proj_images/fitness_crm/crm_img6.png" alt="Fitness CRM - 6">
+                                <img src="proj_images/fitness_crm/crm_img7.png" alt="Fitness CRM - 7">
+                                <img src="proj_images/fitness_crm/crm_img8.png" alt="Fitness CRM - 8">
+                                <img src="proj_images/fitness_crm/crm_img9.png" alt="Fitness CRM - 9">
+                                <img src="proj_images/fitness_crm/crm_img10.png" alt="Fitness CRM - 10">
                             </div>
                         </div>
                     </div>
@@ -3353,17 +3457,17 @@
                 <div class="pj-content">
                     <div class="pj-label">04 — Professional Work</div>
                     <h3 class="pj-name">Fitness CRM</h3>
-                    <div class="pj-tagline">Client management, built for the gym floor.</div>
-                    <p class="pj-desc">A production-grade CRM web application built during a professional internship for a real fitness business. Manages client profiles, tracks progress, handles authentication, and eliminates manual record-keeping. Currently live and in active use by the client.</p>
+                    <div class="pj-tagline">Client management, built for the gym owner.</div>
+                    <p class="pj-desc">A production-grade CRM web application built during an internship for a real fitness business. Manages client profiles, tracks progress, handles authentication, and eliminates manual record-keeping. Currently live and in active use by the client.</p>
                     <div class="pj-stack-label">Built with</div>
                     <div class="pj-stack">PHP · SQL · HTML · CSS · JavaScript</div>
                     <hr class="pj-hr">
-                    <div class="pj-actions">
-                        <a href="#" class="pj-btn primary">Live Demo <span class="pj-arrow">→</span></a>
-                        <a href="https://github.com/vedantkk14" target="_blank" class="pj-btn gh">
-                            <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                            GitHub
-                        </a>
+                    <div class="pj-note">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span>Note: To respect client confidentiality and privacy, the source code and live demo for this production system are not publicly available.</span>
                     </div>
                 </div>
             </div>
