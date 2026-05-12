@@ -3772,35 +3772,60 @@
             plane.position.z = -30;
             sc.add(plane);
 
+            /* Helper: get visible bounds at a given Z depth */
+            const fovRad = cam.fov * Math.PI / 180;
+            function visibleBounds(z) {
+                const dist = cam.position.z - z;
+                const vH = 2 * Math.tan(fovRad / 2) * dist;
+                const vW = vH * cam.aspect;
+                return { maxX: vW / 2, maxY: vH / 2 };
+            }
+            function clampToBounds(x, y, z, margin) {
+                margin = margin || 0.9;
+                const b = visibleBounds(z);
+                return {
+                    x: Math.max(-b.maxX * margin, Math.min(b.maxX * margin, x)),
+                    y: Math.max(-b.maxY * margin, Math.min(b.maxY * margin, y))
+                };
+            }
+
             /* Large wireframe crystal */
             const ig = new THREE.IcosahedronGeometry(8, 1);
             const im = new THREE.MeshBasicMaterial({ color: 0x2a7c7c, wireframe: true, transparent: true, opacity: .15 });
             const ico = new THREE.Mesh(ig, im);
-            ico.position.set(20, 2, -10); sc.add(ico);
+            { const c = clampToBounds(16, 2, -10, 0.7); ico.position.set(c.x, c.y, -10); }
+            sc.add(ico);
 
             /* Octahedron */
             const og = new THREE.OctahedronGeometry(5.5);
             const om = new THREE.MeshBasicMaterial({ color: 0xc9a96e, wireframe: true, transparent: true, opacity: .2 });
             const oct = new THREE.Mesh(og, om);
-            oct.position.set(10, -6, -18); sc.add(oct);
+            { const c = clampToBounds(8, -6, -18, 0.7); oct.position.set(c.x, c.y, -18); }
+            sc.add(oct);
 
             /* Small tetra */
             const tg = new THREE.TetrahedronGeometry(3.5);
             const tm = new THREE.MeshBasicMaterial({ color: 0x7c6aad, wireframe: true, transparent: true, opacity: .25 });
             const tet = new THREE.Mesh(tg, tm);
-            tet.position.set(26, -2, -8); sc.add(tet);
+            { const c = clampToBounds(20, -2, -8, 0.7); tet.position.set(c.x, c.y, -8); }
+            sc.add(tet);
 
             /* Torus */
             const trg = new THREE.TorusGeometry(4, 0.18, 8, 40);
             const trm = new THREE.MeshBasicMaterial({ color: 0xd4967a, transparent: true, opacity: .18 });
             const tor = new THREE.Mesh(trg, trm);
-            tor.position.set(14, 10, -20); tor.rotation.x = 1.2; sc.add(tor);
+            { const c = clampToBounds(12, 8, -20, 0.75); tor.position.set(c.x, c.y, -20); }
+            tor.rotation.x = 1.2; sc.add(tor);
 
             /* Particles with warm palette */
             const cnt = 1400, pos = new Float32Array(cnt * 3), col = new Float32Array(cnt * 3);
             const pal = [[0.16, 0.49, 0.49], [0.79, 0.66, 0.43], [0.96, 0.94, 0.9], [0.83, 0.59, 0.48], [0.49, 0.42, 0.68]];
             for (let i = 0; i < cnt; i++) {
-                pos[i * 3] = (Math.random() - .5) * 110; pos[i * 3 + 1] = (Math.random() - .5) * 60; pos[i * 3 + 2] = (Math.random() - .5) * 35;
+                const pz = (Math.random() - .5) * 35;
+                const rawX = (Math.random() - .5) * 110;
+                const rawY = (Math.random() - .5) * 60;
+                const cp = clampToBounds(rawX, rawY, pz, 0.95);
+                pos[i * 3] = cp.x; pos[i * 3 + 1] = cp.y; pos[i * 3 + 2] = pz;
                 const p = pal[Math.floor(Math.random() * pal.length)];
                 col[i * 3] = p[0]; col[i * 3 + 1] = p[1]; col[i * 3 + 2] = p[2];
             }
@@ -3816,9 +3841,13 @@
                 const g = new THREE.SphereGeometry(.14 + Math.random() * .16, 6, 6);
                 const m = new THREE.MeshBasicMaterial({ color: i % 3 === 0 ? 0x2a7c7c : i % 3 === 1 ? 0xc9a96e : 0x7c6aad, transparent: true, opacity: .75 });
                 const mesh = new THREE.Mesh(g, m);
-                const baseX = isMobile ? 0 : 20;
+                const baseX = isMobile ? 0 : 14;
                 const baseY = isMobile ? 5 : 0;
-                const p = { x: baseX + (Math.random() - .5) * 16, y: baseY + (Math.random() - .5) * 20, z: (Math.random() - .5) * 18 };
+                const rawZ = (Math.random() - .5) * 14;
+                const rawX = baseX + (Math.random() - .5) * 14;
+                const rawY = baseY + (Math.random() - .5) * 16;
+                const cp = clampToBounds(rawX, rawY, rawZ, 0.85);
+                const p = { x: cp.x, y: cp.y, z: rawZ };
                 mesh.position.set(p.x, p.y, p.z); nps.push(p); sc.add(mesh);
             }
             for (let i = 0; i < nps.length; i++) {
