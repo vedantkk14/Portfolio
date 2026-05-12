@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vedant Kolhapure | AI Engineer & Backend Developer</title>
-    <link rel="icon" type="image/png" href="logo/logo.png">
+    <link rel="icon" type="image/png" href="favicon_logo/vk.png">
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap"
         rel="stylesheet">
@@ -3789,12 +3789,56 @@
                 };
             }
 
-            /* Large wireframe crystal */
-            const ig = new THREE.IcosahedronGeometry(8, 1);
+            /* ═══ GLOW SPRITE TEXTURE ═══ */
+            const glowCanvas = document.createElement('canvas');
+            glowCanvas.width = 64; glowCanvas.height = 64;
+            const gctx = glowCanvas.getContext('2d');
+            const grad = gctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+            grad.addColorStop(0, 'rgba(42,124,124,0.6)');
+            grad.addColorStop(0.3, 'rgba(42,124,124,0.15)');
+            grad.addColorStop(1, 'rgba(42,124,124,0)');
+            gctx.fillStyle = grad;
+            gctx.fillRect(0, 0, 64, 64);
+            const glowTex = new THREE.CanvasTexture(glowCanvas);
+
+            /* ═══ MAIN SHAPES ═══ */
+            /* Large wireframe crystal — breathing icosahedron */
+            const ig = new THREE.IcosahedronGeometry(8, 2);
             const im = new THREE.MeshBasicMaterial({ color: 0x2a7c7c, wireframe: true, transparent: true, opacity: .15 });
             const ico = new THREE.Mesh(ig, im);
+            const icoOrigPositions = ig.attributes.position.array.slice(); // save original verts
             { const c = clampToBounds(16, 2, -10, 0.7); ico.position.set(c.x, c.y, -10); }
             sc.add(ico);
+
+            /* Inner energy core — glowing sphere inside the icosahedron */
+            const coreGeo = new THREE.SphereGeometry(3.5, 32, 32);
+            const coreMat = new THREE.MeshBasicMaterial({
+                color: 0x2a7c7c, transparent: true, opacity: .08,
+                side: THREE.BackSide
+            });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            core.position.copy(ico.position);
+            sc.add(core);
+
+            /* Core glow sprite */
+            const coreSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+                map: glowTex, color: 0x2a7c7c, transparent: true, opacity: .3, blending: THREE.AdditiveBlending
+            }));
+            coreSprite.scale.set(18, 18, 1);
+            coreSprite.position.copy(ico.position);
+            sc.add(coreSprite);
+
+            /* Orbiting energy rings */
+            const rings = [];
+            const ringColors = [0x2a7c7c, 0xc9a96e, 0x7c6aad];
+            for (let r = 0; r < 3; r++) {
+                const rGeo = new THREE.TorusGeometry(10 + r * 2.5, 0.04, 8, 80);
+                const rMat = new THREE.MeshBasicMaterial({ color: ringColors[r], transparent: true, opacity: .12 + r * .03 });
+                const ring = new THREE.Mesh(rGeo, rMat);
+                ring.position.copy(ico.position);
+                rings.push(ring);
+                sc.add(ring);
+            }
 
             /* Octahedron */
             const og = new THREE.OctahedronGeometry(5.5);
@@ -3817,7 +3861,7 @@
             { const c = clampToBounds(12, 8, -20, 0.75); tor.position.set(c.x, c.y, -20); }
             tor.rotation.x = 1.2; sc.add(tor);
 
-            /* Particles with warm palette */
+            /* ═══ PARTICLES ═══ */
             const cnt = 1400, pos = new Float32Array(cnt * 3), col = new Float32Array(cnt * 3);
             const pal = [[0.16, 0.49, 0.49], [0.79, 0.66, 0.43], [0.96, 0.94, 0.9], [0.83, 0.59, 0.48], [0.49, 0.42, 0.68]];
             for (let i = 0; i < cnt; i++) {
@@ -3834,22 +3878,40 @@
             pg2.setAttribute('color', new THREE.BufferAttribute(col, 3));
             sc.add(new THREE.Points(pg2, new THREE.PointsMaterial({ size: .09, vertexColors: true, transparent: true, opacity: .55 })));
 
-            /* Neural nodes */
+            /* ═══ NEURAL NODES — with glow halos ═══ */
             const isMobile = window.innerWidth < 900;
             const nps = [];
+            const nodeMeshes = [];
+            const nodeHalos = [];
             for (let i = 0; i < 12; i++) {
                 const g = new THREE.SphereGeometry(.14 + Math.random() * .16, 6, 6);
-                const m = new THREE.MeshBasicMaterial({ color: i % 3 === 0 ? 0x2a7c7c : i % 3 === 1 ? 0xc9a96e : 0x7c6aad, transparent: true, opacity: .75 });
+                const nodeColor = i % 3 === 0 ? 0x2a7c7c : i % 3 === 1 ? 0xc9a96e : 0x7c6aad;
+                const m = new THREE.MeshBasicMaterial({ color: nodeColor, transparent: true, opacity: .75 });
                 const mesh = new THREE.Mesh(g, m);
-                const baseX = isMobile ? 0 : 14;
+                const baseX = isMobile ? 0 : 20;
                 const baseY = isMobile ? 5 : 0;
-                const rawZ = (Math.random() - .5) * 14;
-                const rawX = baseX + (Math.random() - .5) * 14;
-                const rawY = baseY + (Math.random() - .5) * 16;
-                const cp = clampToBounds(rawX, rawY, rawZ, 0.85);
+                const rawX = baseX + (Math.random() - .5) * 16;
+                const rawY = baseY + (Math.random() - .5) * 20;
+                const rawZ = (Math.random() - .5) * 6;
+                const cp = clampToBounds(rawX, rawY, rawZ, 0.88);
                 const p = { x: cp.x, y: cp.y, z: rawZ };
-                mesh.position.set(p.x, p.y, p.z); nps.push(p); sc.add(mesh);
+                mesh.position.set(p.x, p.y, p.z);
+                nps.push(p); nodeMeshes.push(mesh); sc.add(mesh);
+
+                /* Glow halo sprite for each node */
+                const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+                    map: glowTex, color: nodeColor, transparent: true,
+                    opacity: .35, blending: THREE.AdditiveBlending
+                }));
+                halo.scale.set(2.5 + Math.random(), 2.5 + Math.random(), 1);
+                halo.position.set(p.x, p.y, p.z);
+                nodeHalos.push(halo);
+                sc.add(halo);
             }
+
+            /* ═══ CONNECTION LINES + DATA PACKETS ═══ */
+            const connections = [];
+            const dataPackets = [];
             for (let i = 0; i < nps.length; i++) {
                 for (let j = i + 1; j < nps.length; j++) {
                     const d = Math.sqrt((nps[i].x - nps[j].x) ** 2 + (nps[i].y - nps[j].y) ** 2);
@@ -3858,31 +3920,158 @@
                             new THREE.Vector3(nps[i].x, nps[i].y, nps[i].z),
                             new THREE.Vector3(nps[j].x, nps[j].y, nps[j].z)
                         ]);
-                        sc.add(new THREE.Line(lg, new THREE.LineBasicMaterial({ color: 0x2a7c7c, transparent: true, opacity: .15 })));
+                        const line = new THREE.Line(lg, new THREE.LineBasicMaterial({
+                            color: 0x2a7c7c, transparent: true, opacity: .15
+                        }));
+                        sc.add(line);
+                        connections.push({ from: nps[i], to: nps[j], line });
+
+                        /* Data packet — tiny glowing sphere that travels along the line */
+                        const pktGeo = new THREE.SphereGeometry(0.08, 4, 4);
+                        const pktMat = new THREE.MeshBasicMaterial({
+                            color: 0x2a7c7c, transparent: true, opacity: .9
+                        });
+                        const pkt = new THREE.Mesh(pktGeo, pktMat);
+                        pkt.position.set(nps[i].x, nps[i].y, nps[i].z);
+                        sc.add(pkt);
+
+                        /* Packet glow */
+                        const pktGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+                            map: glowTex, color: 0x2a7c7c, transparent: true,
+                            opacity: .4, blending: THREE.AdditiveBlending
+                        }));
+                        pktGlow.scale.set(1.2, 1.2, 1);
+                        pkt.add(pktGlow);
+
+                        dataPackets.push({
+                            mesh: pkt, from: nps[i], to: nps[j],
+                            speed: 0.15 + Math.random() * 0.25,
+                            offset: Math.random() * Math.PI * 2,
+                            dir: Math.random() > 0.5 ? 1 : -1
+                        });
                     }
                 }
             }
 
+            /* ═══ ORBITAL PARTICLE STREAMS ═══ */
+            const streamCount = 200;
+            const streamPos = new Float32Array(streamCount * 3);
+            const streamCol = new Float32Array(streamCount * 3);
+            const streamAngles = [];
+            const streamRadii = [];
+            for (let i = 0; i < streamCount; i++) {
+                const a = Math.random() * Math.PI * 2;
+                const r = 9 + Math.random() * 8;
+                streamAngles.push(a);
+                streamRadii.push(r);
+                streamPos[i * 3] = ico.position.x + Math.cos(a) * r;
+                streamPos[i * 3 + 1] = ico.position.y + Math.sin(a) * r * 0.6;
+                streamPos[i * 3 + 2] = ico.position.z + (Math.random() - .5) * 6;
+                const c = pal[Math.floor(Math.random() * pal.length)];
+                streamCol[i * 3] = c[0]; streamCol[i * 3 + 1] = c[1]; streamCol[i * 3 + 2] = c[2];
+            }
+            const streamGeo = new THREE.BufferGeometry();
+            streamGeo.setAttribute('position', new THREE.BufferAttribute(streamPos, 3));
+            streamGeo.setAttribute('color', new THREE.BufferAttribute(streamCol, 3));
+            const streamPts = new THREE.Points(streamGeo, new THREE.PointsMaterial({
+                size: .12, vertexColors: true, transparent: true, opacity: .5, blending: THREE.AdditiveBlending
+            }));
+            sc.add(streamPts);
+
             if (isMobile) {
                 ico.position.set(0, 5, -12);
+                core.position.copy(ico.position);
+                coreSprite.position.copy(ico.position);
+                rings.forEach(r => r.position.copy(ico.position));
                 oct.position.set(-6, -2, -8);
                 tet.position.set(6, 2, -5);
                 tor.position.set(0, -6, -10);
             }
 
-            let pmx = 0, pmy = 0;
-            // Hover movement removed as requested
-            window.addEventListener('resize', () => { rdr.setSize(W(), H()); cam.aspect = W() / H(); cam.updateProjectionMatrix() });
+            /* ═══ MOUSE PARALLAX ═══ */
+            let mouseX = 0, mouseY = 0;
+            const baseCamX = 0, baseCamY = 0;
+            window.addEventListener('mousemove', e => {
+                mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+                mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+            }, { passive: true });
 
+            window.addEventListener('resize', () => {
+                rdr.setSize(W(), H()); cam.aspect = W() / H(); cam.updateProjectionMatrix();
+            });
+
+            /* ═══ ANIMATION LOOP ═══ */
             const clk = new THREE.Clock();
             function draw() {
                 requestAnimationFrame(draw);
                 const t = clk.getElapsedTime();
                 pmat.uniforms.time.value = t;
+
+                /* Rotate shapes */
                 ico.rotation.y = t * .12; ico.rotation.x = t * .07;
                 oct.rotation.y = -t * .16; oct.rotation.z = t * .09;
                 tet.rotation.x = t * .22; tet.rotation.z = t * .15;
                 tor.rotation.z = t * .08; tor.rotation.y = t * .12;
+
+                /* Breathing icosahedron — vertex displacement */
+                const posArr = ig.attributes.position.array;
+                for (let v = 0; v < posArr.length; v += 3) {
+                    const ox = icoOrigPositions[v], oy = icoOrigPositions[v + 1], oz = icoOrigPositions[v + 2];
+                    const len = Math.sqrt(ox * ox + oy * oy + oz * oz);
+                    const nx = ox / len, ny = oy / len, nz = oz / len;
+                    const breathe = Math.sin(t * 1.5 + len * 2) * 0.3;
+                    posArr[v] = ox + nx * breathe;
+                    posArr[v + 1] = oy + ny * breathe;
+                    posArr[v + 2] = oz + nz * breathe;
+                }
+                ig.attributes.position.needsUpdate = true;
+
+                /* Pulsing inner core */
+                const coreScale = 1 + Math.sin(t * 2) * 0.15;
+                core.scale.set(coreScale, coreScale, coreScale);
+                coreMat.opacity = 0.06 + Math.sin(t * 1.8) * 0.04;
+                coreSprite.material.opacity = 0.2 + Math.sin(t * 1.3) * 0.1;
+                const spriteScale = 18 + Math.sin(t * 0.8) * 3;
+                coreSprite.scale.set(spriteScale, spriteScale, 1);
+
+                /* Orbiting rings */
+                rings[0].rotation.x = t * 0.15; rings[0].rotation.y = t * 0.1;
+                rings[1].rotation.x = Math.PI / 3 + t * 0.12; rings[1].rotation.z = t * 0.08;
+                rings[2].rotation.y = Math.PI / 4 + t * 0.18; rings[2].rotation.x = t * 0.06;
+                rings.forEach((r, idx) => { r.material.opacity = 0.1 + Math.sin(t * 0.7 + idx) * 0.06; });
+
+                /* Pulse node halos */
+                nodeHalos.forEach((h, i) => {
+                    const pulse = 1 + Math.sin(t * 2.5 + i * 1.1) * 0.3;
+                    const baseS = 2.5;
+                    h.scale.set(baseS * pulse, baseS * pulse, 1);
+                    h.material.opacity = 0.2 + Math.sin(t * 2 + i) * 0.15;
+                });
+
+                /* Animate data packets along connections */
+                dataPackets.forEach(pk => {
+                    const progress = ((Math.sin(t * pk.speed + pk.offset) * pk.dir + 1) * 0.5);
+                    pk.mesh.position.x = pk.from.x + (pk.to.x - pk.from.x) * progress;
+                    pk.mesh.position.y = pk.from.y + (pk.to.y - pk.from.y) * progress;
+                    pk.mesh.position.z = pk.from.z + (pk.to.z - pk.from.z) * progress;
+                });
+
+                /* Animate orbital particle streams */
+                const sPos = streamGeo.attributes.position.array;
+                for (let i = 0; i < streamCount; i++) {
+                    streamAngles[i] += 0.003 + (i % 5) * 0.001;
+                    const a = streamAngles[i];
+                    const r = streamRadii[i] + Math.sin(t + i) * 0.5;
+                    sPos[i * 3] = ico.position.x + Math.cos(a) * r;
+                    sPos[i * 3 + 1] = ico.position.y + Math.sin(a) * r * 0.6 + Math.sin(t * 0.5 + i * 0.3) * 0.8;
+                    sPos[i * 3 + 2] = ico.position.z + Math.sin(a * 2 + t) * 3;
+                }
+                streamGeo.attributes.position.needsUpdate = true;
+
+                /* Mouse parallax — smooth camera offset */
+                cam.position.x += (mouseX * 3 - cam.position.x) * 0.02;
+                cam.position.y += (-mouseY * 2 - cam.position.y) * 0.02;
+
                 cam.lookAt(0, 0, 0);
                 rdr.render(sc, cam);
             }
